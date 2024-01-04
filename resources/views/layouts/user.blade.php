@@ -4,6 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <title>@yield('title') | Little Florist</title>
     <link rel="stylesheet" href="{{ asset('assets/style.css') }}">
     <link rel="shortcut icon" href="{{ asset('assets/LF_logo.png') }}" type="image/x-icon">
@@ -113,87 +115,107 @@
 
         <div class="">
             @if (Auth::user())
-            <form class="" style="padding-bottom: 60px !important;">
-                <div class="flex justify-evenly items-start my-6">
-                    <div class="w-auto">
-                        <img src="{{ asset('assets/Gambar/p6.jpg') }}" alt="product" class=""
-                            style="aspect-ratio: 1/1; width: 100px; ">
-                    </div>
-                    <div class="w-auto pl-1 flex flex-col items-start justify-start">
-                        <h3 class="" style="font-size: 17px;" id="cart-title">Karangan Bunga Papan</h3>
-                        <p class="" style="color: #e84393; font-weight: 600; font-size: 16px;">Rp 12.000</p>
-                        {{-- <label for="quantity-input"
+                @if ($carts->count() > 0)
+                <form class="" style="padding-bottom: 60px !important;">
+                    @foreach ($carts as $cart)
+                    <div class="flex justify-evenly items-start my-6">
+                        <div class="w-auto rounded shadow" style="margin-right: 10px;">
+                            <img src="{{ $cart->products->image_asset == 'YA' ? asset('assets/' . $cart->products->image) : $cart->products->image }}" alt="product" class=""
+                                style="aspect-ratio: 1/1; width: 100px; ">
+                        </div>
+                        <div class="w-auto pl-1 flex flex-col items-start justify-start">
+                            <h3 class="" style="font-size: 17px;" id="cart-title">{{ $cart->products->name }}</h3>
+                            <p class="" style="color: #e84393; font-weight: 600; font-size: 16px;">Rp {{ number_format($cart->products->price_after) }}</p>
+                            {{-- <label for="quantity-input"
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Choose
                             quantity:</label> --}}
-                        <div class="relative flex items-center max-w-[8rem]">
-                            <button type="button" id="decrement-button" data-input-counter-decrement="quantity-input" onclick="decreaseQuantity()"
-                                class="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 p-2 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none">
-                                <svg class="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                        stroke-width="2" d="M1 1h16" />
-                                </svg>
-                            </button>
-                            <input type="text" id="quantity" data-input-counter value="1"
-                                aria-describedby="helper-text-explanation"
-                                class="bg-gray-50 border-x-0 border-gray-300 text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder="1" readonly required>
-                            <button type="button" id="increment-button" onclick="increaseQuantity()"
-                                data-input-counter-increment="quantity-input"
-                                class="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 p-2 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none">
-                                <svg class="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                        stroke-width="2" d="M9 1v16M1 9h16" />
-                                </svg>
-                            </button>
-                            <i class="ml-1 text-md fa-solid fa-trash-can bg-red-500 text-white dark:bg-red-700 dark:hover:bg-red-600 dark:border-gray-600 hover:bg-red-600 border border-gray-300 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none" style="padding: 6px;"></i>
+                            <div class="relative flex items-center max-w-[8rem]">
+                                <button type="button" id="decrement-button"
+                                    data-input-counter-decrement="quantity-input" onclick="decreaseQuantity_{{ $cart->id }}()"
+                                    class="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 p-2 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none">
+                                    <svg class="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true"
+                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2" d="M1 1h16" />
+                                    </svg>
+                                </button>
+                                <input type="text" id="{{ $cart->products->slug }}" data-input-counter value="{{ $cart->total_product }}"
+                                    aria-describedby="helper-text-explanation"
+                                    class="bg-gray-50 border-x-0 border-gray-300 text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    placeholder="1" readonly required>
+                                <button type="button" id="increment-button" onclick="increaseQuantity_{{ $cart->id }}()"
+                                    data-input-counter-increment="quantity-input"
+                                    class="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 p-2 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none">
+                                    <svg class="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true"
+                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2" d="M9 1v16M1 9h16" />
+                                    </svg>
+                                </button>
+                                <i class="ml-1 text-md fa-solid fa-trash-can bg-red-500 text-white dark:bg-red-700 dark:hover:bg-red-600 dark:border-gray-600 hover:bg-red-600 border border-gray-300 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none"
+                                    style="padding: 6px;"></i>
+                            </div>
+                            <script>
+                                let currentQuantity_{{ $cart->id }} = {{ $cart->total_product }};
+
+                                function increaseQuantity_{{ $cart->id }}() {
+                                    currentQuantity_{{ $cart->id }} = Math.max(1, currentQuantity_{{ $cart->id }} + 1);
+                                    document.getElementById('{{ $cart->products->slug }}').value = currentQuantity_{{ $cart->id }};
+                                }
+
+                                function decreaseQuantity_{{ $cart->id }}() {
+                                    currentQuantity_{{ $cart->id }} = Math.max(1, currentQuantity_{{ $cart->id }} - 1);
+                                    document.getElementById('{{ $cart->products->slug }}').value = currentQuantity_{{ $cart->id }};
+                                }
+                            </script>
+
                         </div>
-                          <script>
-                            let currentQuantity = 1;
-                            let cartQuantity = 0;
+                    </div>
+                    @endforeach
 
-                            function increaseQuantity() {
-                              currentQuantity = Math.max(1, currentQuantity + 1);
-                              document.getElementById('quantity').value = currentQuantity;
-                            }
+                    <div class="fixed bottom-0 flex justify-center items-center w-full bg-white"
+                        style="width: 310px;">
+                        <button type="button" style="width: 100% !important;"
+                            class="text-white text-lg bg-[#2557D6] hover:bg-[#2557D6]/90 focus:ring-4 focus:ring-[#2557D6]/50 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center flex justify-center items-center gap-2 dark:focus:ring-[#2557D6]/50 mb-2">
+                            <span class="font-semibold">CHECKOUT</span>
+                            <i class="fa-solid fa-right-to-bracket"></i>
+                        </button>
+                    </div>
+                </form>
 
-                            function decreaseQuantity() {
-                              currentQuantity = Math.max(1, currentQuantity - 1);
-                              document.getElementById('quantity').value = currentQuantity;
-                            }
+                @else
 
-                            function addToCart() {
-                              cartQuantity += currentQuantity;
-                              document.getElementById('cartQuantity').innerText = cartQuantity;
-                            }
-                          </script>
+                <div class="text-center mt-6">
+                    <h3 style="font-size: 24px; margin-bottom: 4px;">Tidak Ada Daftar Produk!</h3>
+                    <div class="flex justify-center items-center">
+                        <a href="{{ url('/login') }}">
+                            <button type="button"
+                                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Login</button>
+                        </a>
 
+                        <a href="{{ url('/register') }}">
+                            <button type="button"
+                                class="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2 text-center me-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Register</button>
+                        </a>
                     </div>
                 </div>
 
-                <div class="fixed bottom-0 flex justify-center items-center w-full bg-white" style="width: 310px;">
-                    <button type="button" style="width: 100% !important;"
-                        class="text-white text-lg bg-[#2557D6] hover:bg-[#2557D6]/90 focus:ring-4 focus:ring-[#2557D6]/50 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center flex justify-center items-center gap-2 dark:focus:ring-[#2557D6]/50 mb-2">
-                        <span class="font-semibold">CHECKOUT</span>
-                        <i class="fa-solid fa-right-to-bracket"></i>
-                    </button>
-                </div>
-            </form>
-
+                @endif
             @else
-            <div class="text-center mt-6">
-                <h3 style="font-size: 24px; margin-bottom: 4px;">Kamu Belum Login!</h3>
-                <div class="flex justify-center items-center">
-                    <a href="{{ url('/login') }}">
-                        <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Login</button>
-                    </a>
+                <div class="text-center mt-6">
+                    <h3 style="font-size: 24px; margin-bottom: 4px;">Kamu Belum Login!</h3>
+                    <div class="flex justify-center items-center">
+                        <a href="{{ url('/login') }}">
+                            <button type="button"
+                                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Login</button>
+                        </a>
 
-                    <a href="{{ url('/register') }}">
-                        <button type="button" class="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2 text-center me-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Register</button>
-                    </a>
+                        <a href="{{ url('/register') }}">
+                            <button type="button"
+                                class="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2 text-center me-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Register</button>
+                        </a>
+                    </div>
                 </div>
-            </div>
             @endif
         </div>
     </div>
@@ -215,6 +237,49 @@
         </div>
         <div class="grid grid-cols-3 gap-4 p-4 lg:grid-cols-4">
 
+            <div
+                class="p-4 rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 dark:hover:bg-gray-600 dark:bg-gray-700">
+                <div
+                    class="flex justify-center items-center p-2 mx-auto mb-2 bg-gray-200 dark:bg-gray-600 rounded-full w-[48px] h-[48px] max-w-[48px] max-h-[48px]">
+                    <svg class="inline w-5 h-5 text-gray-500 dark:text-gray-400" aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 14">
+                        <path
+                            d="M18 0H2a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2ZM9 6v2H2V6h7Zm2 0h7v2h-7V6Zm-9 4h7v2H2v-2Zm9 2v-2h7v2h-7Z" />
+                    </svg>
+                </div>
+                <div class="font-medium text-center text-gray-500 dark:text-gray-400">Table</div>
+            </div>
+
+            <a href="{{ url('/login') }}">
+                <div
+                    class="hidden p-4 rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 dark:hover:bg-gray-600 dark:bg-gray-700 lg:block">
+                    <div
+                        class="flex justify-center items-center p-2 mx-auto mb-2 bg-gray-200 dark:bg-gray-600 rounded-full w-[48px] h-[48px] max-w-[48px] max-h-[48px]">
+                        <svg class="inline w-5 h-5 text-gray-500 dark:text-gray-400" aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 14 20">
+                            <path
+                                d="M13.383.076a1 1 0 0 0-1.09.217L11 1.586 9.707.293a1 1 0 0 0-1.414 0L7 1.586 5.707.293a1 1 0 0 0-1.414 0L3 1.586 1.707.293A1 1 0 0 0 0 1v18a1 1 0 0 0 1.707.707L3 18.414l1.293 1.293a1 1 0 0 0 1.414 0L7 18.414l1.293 1.293a1 1 0 0 0 1.414 0L11 18.414l1.293 1.293A1 1 0 0 0 14 19V1a1 1 0 0 0-.617-.924ZM10 15H4a1 1 0 1 1 0-2h6a1 1 0 0 1 0 2Zm0-4H4a1 1 0 1 1 0-2h6a1 1 0 1 1 0 2Zm0-4H4a1 1 0 0 1 0-2h6a1 1 0 1 1 0 2Z" />
+                        </svg>
+                    </div>
+                    <div class="font-medium text-center text-gray-500 dark:text-gray-400">Login</div>
+                </div>
+            </a>
+
+            <a href="{{ url('/register') }}">
+                <div
+                    class="p-4 rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 dark:hover:bg-gray-600 dark:bg-gray-700">
+                    <div
+                        class="flex justify-center items-center p-2 mx-auto mb-2 bg-gray-200 dark:bg-gray-600 rounded-full w-[48px] h-[48px] max-w-[48px] max-h-[48px]">
+                        <svg class="inline w-5 h-5 text-gray-500 dark:text-gray-400" aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
+                            <path
+                                d="M16 1h-3.278A1.992 1.992 0 0 0 11 0H7a1.993 1.993 0 0 0-1.722 1H2a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2Zm-3 14H5a1 1 0 0 1 0-2h8a1 1 0 0 1 0 2Zm0-4H5a1 1 0 0 1 0-2h8a1 1 0 1 1 0 2Zm0-5H5a1 1 0 0 1 0-2h2V2h4v2h2a1 1 0 1 1 0 2Z" />
+                        </svg>
+                    </div>
+                    <div class="font-medium text-center text-gray-500 dark:text-gray-400">Register</div>
+                </div>
+            </a>
+
             {{-- CART --}}
             <div class="p-4 rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 dark:hover:bg-gray-600 dark:bg-gray-700"
                 data-drawer-target="cart-right-drawer" data-drawer-show="cart-right-drawer"
@@ -230,45 +295,6 @@
                     </svg>
                 </div>
                 <div class="font-medium text-center text-gray-500 dark:text-gray-400">Chart</div>
-            </div>
-
-
-
-            <div
-                class="p-4 rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 dark:hover:bg-gray-600 dark:bg-gray-700">
-                <div
-                    class="flex justify-center items-center p-2 mx-auto mb-2 bg-gray-200 dark:bg-gray-600 rounded-full w-[48px] h-[48px] max-w-[48px] max-h-[48px]">
-                    <svg class="inline w-5 h-5 text-gray-500 dark:text-gray-400" aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 14">
-                        <path
-                            d="M18 0H2a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2ZM9 6v2H2V6h7Zm2 0h7v2h-7V6Zm-9 4h7v2H2v-2Zm9 2v-2h7v2h-7Z" />
-                    </svg>
-                </div>
-                <div class="font-medium text-center text-gray-500 dark:text-gray-400">Table</div>
-            </div>
-            <div
-                class="hidden p-4 rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 dark:hover:bg-gray-600 dark:bg-gray-700 lg:block">
-                <div
-                    class="flex justify-center items-center p-2 mx-auto mb-2 bg-gray-200 dark:bg-gray-600 rounded-full w-[48px] h-[48px] max-w-[48px] max-h-[48px]">
-                    <svg class="inline w-5 h-5 text-gray-500 dark:text-gray-400" aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 14 20">
-                        <path
-                            d="M13.383.076a1 1 0 0 0-1.09.217L11 1.586 9.707.293a1 1 0 0 0-1.414 0L7 1.586 5.707.293a1 1 0 0 0-1.414 0L3 1.586 1.707.293A1 1 0 0 0 0 1v18a1 1 0 0 0 1.707.707L3 18.414l1.293 1.293a1 1 0 0 0 1.414 0L7 18.414l1.293 1.293a1 1 0 0 0 1.414 0L11 18.414l1.293 1.293A1 1 0 0 0 14 19V1a1 1 0 0 0-.617-.924ZM10 15H4a1 1 0 1 1 0-2h6a1 1 0 0 1 0 2Zm0-4H4a1 1 0 1 1 0-2h6a1 1 0 1 1 0 2Zm0-4H4a1 1 0 0 1 0-2h6a1 1 0 1 1 0 2Z" />
-                    </svg>
-                </div>
-                <div class="hidden font-medium text-center text-gray-500 dark:text-gray-400">Ticket</div>
-            </div>
-            <div
-                class="p-4 rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 dark:hover:bg-gray-600 dark:bg-gray-700">
-                <div
-                    class="flex justify-center items-center p-2 mx-auto mb-2 bg-gray-200 dark:bg-gray-600 rounded-full w-[48px] h-[48px] max-w-[48px] max-h-[48px]">
-                    <svg class="inline w-5 h-5 text-gray-500 dark:text-gray-400" aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
-                        <path
-                            d="M16 1h-3.278A1.992 1.992 0 0 0 11 0H7a1.993 1.993 0 0 0-1.722 1H2a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2Zm-3 14H5a1 1 0 0 1 0-2h8a1 1 0 0 1 0 2Zm0-4H5a1 1 0 0 1 0-2h8a1 1 0 1 1 0 2Zm0-5H5a1 1 0 0 1 0-2h2V2h4v2h2a1 1 0 1 1 0 2Z" />
-                    </svg>
-                </div>
-                <div class="font-medium text-center text-gray-500 dark:text-gray-400">List</div>
             </div>
 
         </div>
@@ -325,29 +351,31 @@
     <!-- footer section ends -->
 
     {{-- FLOWBITE (FRAMEWORK CSS -TAILWINDCSS) --}}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js">
+        < />
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-      limitWords("cart-title", 4); // Ganti "myParagraph" dengan ID atau kelas elemen teks Anda
-    });
+        <
+        script >
+            document.addEventListener("DOMContentLoaded", function() {
+                limitWords("cart-title", 4); // Ganti "myParagraph" dengan ID atau kelas elemen teks Anda
+            });
 
-    function limitWords(elementId, wordLimit) {
-      var element = document.getElementById(elementId);
+        function limitWords(elementId, wordLimit) {
+            var element = document.getElementById(elementId);
 
-      if (element) {
-        var words = element.textContent.split(" ");
+            if (element) {
+                var words = element.textContent.split(" ");
 
-        if (words.length > wordLimit) {
-          var limitedWords = words.slice(0, wordLimit).join(" ");
-          element.textContent = limitedWords;
+                if (words.length > wordLimit) {
+                    var limitedWords = words.slice(0, wordLimit).join(" ");
+                    element.textContent = limitedWords;
 
-          var warningMessage = document.createElement("span");
-          warningMessage.textContent = " ...";
-          element.appendChild(warningMessage);
+                    var warningMessage = document.createElement("span");
+                    warningMessage.textContent = " ...";
+                    element.appendChild(warningMessage);
+                }
+            }
         }
-      }
-    }
     </script>
 </body>
 

@@ -26,6 +26,14 @@ class Product extends Model
         'status',
     ];
 
+    public function carts() {
+        return $this->hasMany(Cart::class, 'product_id');
+    }
+
+    // public function users() {
+    //     return $this->belongsToMany(User::class, 'carts', 'product_id', 'user_id');
+    // }
+
     public function sluggable(): array
     {
         return [
@@ -34,5 +42,7 @@ class Product extends Model
             ]
         ];
     }
+
+
 
 }

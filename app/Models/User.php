@@ -29,6 +29,13 @@ class User extends Authenticatable
         'role',
     ];
 
+    public function carts() {
+        return $this->hasMany(Cart::class, 'user_id');
+    }
+
+    // public function products() {
+    //     return $this->belongsToMany(Product::class, 'carts', 'user_id', 'product_id');
+    // }
 
     public function sluggable(): array
     {
@@ -38,6 +45,7 @@ class User extends Authenticatable
             ]
         ];
     }
+
 
 
     /**

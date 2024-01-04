@@ -31,5 +31,7 @@ Route::get('/produk/{slug}', [ProductController::class, 'detailProduct']);
 Route::middleware('auth')->group(function() {
     Route::get('logout', [AuthController::class, 'logout']);
 
+    Route::post('/addToCart', [ProductController::class, 'addToCart']);
+
 
 });
