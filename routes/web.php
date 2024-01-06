@@ -37,9 +37,13 @@ Route::middleware('auth')->group(function() {
     Route::delete('/deleteCart/{id}', [ProductController::class, 'deleteCart'])->name('cart.destroy');
 
     Route::post('/transaction.start', [TransactionController::class, 'start'])->name('transaction.start');
+    Route::post('/transaction.start.now.{id}', [TransactionController::class, 'startNow'])->name('transaction.start.now');
 
     Route::get('/transaksi-detail', [TransactionController::class, 'detail'])->name('transaction.detail');
+    Route::get('/transaksi-detail-now', [TransactionController::class, 'detailNow'])->name('transaction.detail.now');
+
     Route::post('/transaction.order', [TransactionController::class, 'order'])->name('transaction.order');
+    Route::post('/transaction.order.now', [TransactionController::class, 'orderNow'])->name('transaction.order.now');
 
 
 

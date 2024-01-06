@@ -22,7 +22,7 @@
                         <div class="icons">
                             <a href="#" class="">{{ $product->sold }}</a>
                             <button class="cart-btn" data-product-slug="{{ $product->slug }}">Add to Cart</button>
-                            <a href="#" class="fa-solid fa-eye"></a>
+                            <a href="{{ url('/produk/'. $product->slug) }}" class="fa-solid fa-eye"></a>
                         </div>
                     </div>
                     <div class="content">
@@ -55,7 +55,7 @@
                         if (response.success) {
                             const Toast = Swal.mixin({
                                 toast: true,
-                                position: "top-end",
+                                position: "top-start",
                                 showConfirmButton: false,
                                 timer: 3000,
                                 timerProgressBar: true,
@@ -76,10 +76,6 @@
                     }
                 });
             });
-
-            function updateCartDrawer() {
-
-            }
         });
     </script>
 
