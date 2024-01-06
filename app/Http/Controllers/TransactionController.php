@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Str;
+
 class TransactionController extends Controller
 {
     public function start(Request $request)
@@ -39,30 +40,40 @@ class TransactionController extends Controller
 
     public function order(Request $request)
     {
-        // dd($request->all());
-
         $idProducts = $request->products;
         $soldArray = $request->sold;
+        $code = Str::random(5) . '-' . Auth::user()->username . '-' . Carbon::now();
 
-        // PRODUCT FUNCTION
-        // for ($i=1; $i <= $request->total_products; $i++) {
-        //     $data = [
-        //         'code' => Str::random(5) . '-' . Auth::user()->username . '-' . Carbon::now(),
-        //         'user_id' => Auth::user()->id,
-        //         'product_id' => $idProducts[$loop->index],
-        //         'message' => $request->message,
-        //         'address' => $request->address,
-        //         'total_product' => $request->totalProducts,
-        //         'date' => Carbon::now()->toDateString(),
-        //         'status' => 'Belum Bayar',
-        //     ];
-        // }
+        $carts = Cart::whereIn('id', $request->products)
+            ->orderByRaw("FIELD(id, " . implode(',', $request->products) . ")")
+            ->get();
 
-        foreach ($request->products as $lala) {
+        dd($request->products);
+
+
+
+        $products = Product::whereIn('id', $request->products)
+            ->orderByRaw("FIELD(id, " . implode(',', $request->products) . ")")
+            ->get();
+
+        foreach ($products as $index => $item) {
+            $sold = $soldArray[$index];
+
+            $item->stock -= $sold;
+            $item->sold += $sold;
+
+            if ($item->stock == 0) {
+                $item->status = 'Habis';
+            }
+
+            $item->save();
+        }
+
+        foreach ($request->products as $product) {
             $data = [
-                'code' => Str::random(5) . '-' . Auth::user()->username . '-' . Carbon::now(),
+                'code' => $code,
                 'user_id' => Auth::user()->id,
-                'product_id' => $lala,
+                'product_id' => $product,
                 'message' => $request->message,
                 'address' => $request->address,
                 'total_price' => $request->total_price,
@@ -73,5 +84,6 @@ class TransactionController extends Controller
             Transaction::create($data);
         }
 
+        dd('BERHASIL');
     }
 }
