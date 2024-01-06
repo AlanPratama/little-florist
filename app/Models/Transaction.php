@@ -15,6 +15,7 @@ class Transaction extends Model
         'user_id',
         'product_id',
         'message',
+        'address',
         'total_product',
         'total_price',
         'date',
