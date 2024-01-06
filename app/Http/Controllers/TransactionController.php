@@ -114,49 +114,40 @@ class TransactionController extends Controller
         $product = Product::where('id', $productId)->first();
 
         $carts = Cart::where('user_id', Auth::user()->id)->get();
-        dd('alalalal');
         return view('pages.user.transaction.detailTransactionNow', compact('product', 'sold', 'carts'));
     }
 
 
     public function orderNow(Request $request)
     {
-        $soldArray = $request->sold;
         $code = Str::random(5) . '-' . Auth::user()->username . '-' . Carbon::now();
+        $sold = $request->sold;
 
 
-        $products = Product::whereIn('id', $request->products)
-            ->orderByRaw("FIELD(id, " . implode(',', $request->products) . ")")
-            ->get();
+        $product = Product::where('slug', $request->product)->first();
+        $product->stock -= $sold;
+        $product->sold += $sold;
 
-        // foreach ($products as $index => $item) {
-        //     $sold = $soldArray[$index];
+        if ($product->stock == 0) {
+            $product->status = 'Habis';
+        }
+        $product->save();
 
-        //     $item->stock -= $sold;
-        //     $item->sold += $sold;
 
-        //     if ($item->stock == 0) {
-        //         $item->status = 'Habis';
-        //     }
+        $totalPrice = $product->price_after * $sold;
+        $data = [
+            'code' => $code,
+            'user_id' => Auth::user()->id,
+            'product_id' => $product->id,
+            'message' => $request->message,
+            'address' => $request->address,
+            'total_price' => $totalPrice,
+            'total_product' => $sold,
+            'date' => Carbon::now()->toDateString(),
+            'status' => 'Belum Bayar',
+        ];
+        Transaction::create($data);
 
-        //     $item->save();
-        // }
-
-        // foreach ($request->products as $product) {
-        //     $data = [
-        //         'code' => $code,
-        //         'user_id' => Auth::user()->id,
-        //         'product_id' => $product,
-        //         'message' => $request->message,
-        //         'address' => $request->address,
-        //         'total_price' => $request->total_price,
-        //         'total_product' => $request->total_sold,
-        //         'date' => Carbon::now()->toDateString(),
-        //         'status' => 'Belum Bayar',
-        //     ];
-        //     Transaction::create($data);
-        // }
-
-        // dd('BERHASIL');
+        dd('BERHASIL');
     }
 }

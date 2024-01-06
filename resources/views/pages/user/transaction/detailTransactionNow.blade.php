@@ -3,22 +3,6 @@
 @section('title', 'Homepage')
 
 @section('content')
-    <style>
-        .detailTransaction {
-            position: fixed;
-            right: 0;
-            width: 50%;
-        }
-
-        @media(max-width: 1024px) {
-            .detailTransaction {
-                position: static;
-                right: 0;
-                width: 100%;
-            }
-        }
-    </style>
-
 
     <div class="w-full flex justify-center items-center" style="margin-top: 100px;">
         <div class="relative flex lg:flex-row flex-col lg:justify-between justify-start lg:items-start items-start"
@@ -45,7 +29,7 @@
                                     $total = $product->price_after * $sold;
                                     $totalPrice += $total;
                                 @endphp
-                                Total: {{ $total }}
+                                Total: {{ number_format($total) }}
                             </p>
 
                             <p class="mb-3 font-normal text-gray-700 dark:text-gray-400"
@@ -64,7 +48,7 @@
 
 
             <div
-                class="detailTransaction m-2 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                class="w-full m-2 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                 <ul class="flex justify-between text-sm font-medium text-center text-gray-500 border-b border-gray-200 rounded-t-lg bg-gray-50 dark:border-gray-700 dark:text-gray-400 dark:bg-gray-800"
                     id="defaultTab" data-tabs-toggle="#defaultTabContent" role="tablist">
                     <li class="w-1/2">
@@ -103,7 +87,7 @@
                             </p>
                         <hr style="height: 2px" class="my-2 bg-gray-400 border-0 dark:bg-gray-700">
                         <p class="text-xl mb-3 text-gray-500 dark:text-gray-400">
-                            <span class="font-bold">TOTAL HARGA: </span> {{ number_format($totalPrice) }}
+                            <span class="font-bold">TOTAL HARGA: </span> Rp {{ number_format($totalPrice) }}
                         </p>
 
                         {{-- <p class="inline-flex items-center font-medium text-blue-600 hover:text-blue-800 dark:text-blue-500 dark:hover:text-blue-700">
@@ -124,9 +108,10 @@
                             Input</h2>
                         <!-- List -->
 
-                        <form action="{{ route('transaction.order.now', ['id' => $product->id]) }}" method="post">
+                        <form action="{{ route('transaction.order.now') }}" method="post">
                             @csrf
 
+                            <input type="hidden" name="product" value="{{ $product->slug }}">
                             <input type="hidden" name="sold" value="{{ $sold }}">
 
                             <div

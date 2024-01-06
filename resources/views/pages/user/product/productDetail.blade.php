@@ -103,9 +103,9 @@
                 </div>
                 <!-- Modal body -->
                 <div class="p-4 md:p-5 space-y-4">
-                    <div class="flex justify-center items-center w-auto h-auto">
+                    <div class="flex justify-center items-center gap-2 w-auto h-auto">
                         <img src="{{ $product->image_asset == 'YA' ? asset('assets/' . $product->image) : $product->image }}"
-                            alt="" class="md:w-48 w-24">
+                            alt="" class="md:w-48 w-24 rounded">
                         <div class="w-auto h-auto">
                             <p class="text-lg">{{ $product->name }}</p>
 

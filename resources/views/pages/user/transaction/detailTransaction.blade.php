@@ -46,7 +46,7 @@
                                     $total = $product->price_after * $soldArray[$loop->index];
                                     $totalPrice += $total;
                                 @endphp
-                                Total: {{ $total }}
+                                Total: {{ number_format($total) }}
                             </p>
 
                             <p class="mb-3 font-normal text-gray-700 dark:text-gray-400"
@@ -107,7 +107,7 @@
                         @endforeach
                         <hr style="height: 2px" class="my-2 bg-gray-400 border-0 dark:bg-gray-700">
                         <p class="text-xl mb-3 text-gray-500 dark:text-gray-400">
-                            <span class="font-bold">TOTAL HARGA: </span> {{ number_format($totalPrice) }}
+                            <span class="font-bold">TOTAL HARGA: </span> Rp {{ number_format($totalPrice) }}
                         </p>
 
                         {{-- <p class="inline-flex items-center font-medium text-blue-600 hover:text-blue-800 dark:text-blue-500 dark:hover:text-blue-700">
