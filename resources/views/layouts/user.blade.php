@@ -18,6 +18,10 @@
 
     {{-- SWEETALERT 2 --}}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    {{-- AXIOS --}}
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
 </head>
 
 <body>
@@ -68,6 +72,16 @@
         </script>
     @endif
 
+    @if (session('invalid'))
+        <script>
+            Swal.fire({
+                title: "Invalid!",
+                text: "{{ session('invalid') }}",
+                icon: "error"
+            });
+        </script>
+    @endif
+
 
 
     <!-- drawer init and toggle -->
@@ -113,92 +127,103 @@
         </button>
         <hr style="height: 1.5px !important;" class="bg-gray-300 border-0 dark:bg-gray-700">
 
-        <div class="">
+        <div class="" style="padding-bottom: 60px !important;">
             @if (Auth::user())
                 @if ($carts->count() > 0)
-                <form class="" style="padding-bottom: 60px !important;">
-                    @foreach ($carts as $cart)
-                    <div class="flex justify-evenly items-start my-6">
-                        <div class="w-auto rounded shadow" style="margin-right: 10px;">
-                            <img src="{{ $cart->products->image_asset == 'YA' ? asset('assets/' . $cart->products->image) : $cart->products->image }}" alt="product" class=""
-                                style="aspect-ratio: 1/1; width: 100px; ">
-                        </div>
-                        <div class="w-auto pl-1 flex flex-col items-start justify-start">
-                            <h3 class="" style="font-size: 17px;" id="cart-title">{{ $cart->products->name }}</h3>
-                            <p class="" style="color: #e84393; font-weight: 600; font-size: 16px;">Rp {{ number_format($cart->products->price_after) }}</p>
-                            {{-- <label for="quantity-input"
+                    <form method="post" action="{{ route('transaction.start') }}">
+                        @csrf
+                        @foreach ($carts as $cart)
+                            <div class="flex justify-evenly items-start my-6">
+                                <div class="w-auto rounded shadow" style="margin-right: 10px;">
+                                    <img src="{{ $cart->products->image_asset == 'YA' ? asset('assets/' . $cart->products->image) : $cart->products->image }}"
+                                        alt="product" class="" style="aspect-ratio: 1/1; width: 100px; ">
+                                </div>
+                                <div class="w-auto pl-1 flex flex-col items-start justify-start">
+                                    <h3 class="" style="font-size: 17px;" id="cart-title">
+                                        {{ $cart->products->name }} ({{ $cart->products->id }})</h3>
+                                    <p class="" style="color: #e84393; font-weight: 600; font-size: 16px;">Rp
+                                        {{ number_format($cart->products->price_after) }}</p>
+                                    {{-- <label for="quantity-input"
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Choose
                             quantity:</label> --}}
-                            <div class="relative flex items-center max-w-[8rem]">
-                                <button type="button" id="decrement-button"
-                                    data-input-counter-decrement="quantity-input" onclick="decreaseQuantity_{{ $cart->id }}()"
-                                    class="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 p-2 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none">
-                                    <svg class="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true"
-                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                            stroke-width="2" d="M1 1h16" />
-                                    </svg>
-                                </button>
-                                <input type="text" id="{{ $cart->products->slug }}" data-input-counter value="{{ $cart->total_product }}"
-                                    aria-describedby="helper-text-explanation"
-                                    class="bg-gray-50 border-x-0 border-gray-300 text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                    placeholder="1" readonly required>
-                                <button type="button" id="increment-button" onclick="increaseQuantity_{{ $cart->id }}()"
-                                    data-input-counter-increment="quantity-input"
-                                    class="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 p-2 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none">
-                                    <svg class="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true"
-                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                            stroke-width="2" d="M9 1v16M1 9h16" />
-                                    </svg>
-                                </button>
-                                <i class="ml-1 text-md fa-solid fa-trash-can bg-red-500 text-white dark:bg-red-700 dark:hover:bg-red-600 dark:border-gray-600 hover:bg-red-600 border border-gray-300 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none"
-                                    style="padding: 6px;"></i>
+                                    <div class="relative flex items-center max-w-[8rem]">
+                                        <button type="button" id="decrement-button"
+                                            data-input-counter-decrement="quantity-input"
+                                            onclick="decreaseQuantity_{{ $cart->id }}()"
+                                            class="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 p-2 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none">
+                                            <svg class="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true"
+                                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
+                                                <path stroke="currentColor" stroke-linecap="round"
+                                                    stroke-linejoin="round" stroke-width="2" d="M1 1h16" />
+                                            </svg>
+                                        </button>
+                                        <input type="text"
+                                            value="{{ $cart->products->id }}"
+                                            name="product[]" class="bg-gray-50 border-x-0 border-gray-300 hidden text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                            placeholder="1" readonly required>
+                                        <input type="text" id="{{ $cart->products->slug }}" data-input-counter
+                                            value="{{ $cart->total_product }}"
+                                            name="sold[]"
+                                            aria-describedby="helper-text-explanation"
+                                            class="bg-gray-50 border-x-0 border-gray-300 text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                            placeholder="1" readonly required>
+                                        <button type="button" id="increment-button"
+                                            onclick="increaseQuantity_{{ $cart->id }}()"
+                                            data-input-counter-increment="quantity-input"
+                                            class="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 p-2 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none">
+                                            <svg class="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true"
+                                                xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                viewBox="0 0 18 18">
+                                                <path stroke="currentColor" stroke-linecap="round"
+                                                    stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16" />
+                                            </svg>
+                                        </button>
+                                        <i class="ml-1 text-md fa-solid fa-trash-can bg-red-500 text-white dark:bg-red-700 dark:hover:bg-red-600 dark:border-gray-600 hover:bg-red-600 border border-gray-300 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none"
+                                            style="padding: 6px;"
+                                            onclick="event.preventDefault(); deleteCart('{{ $cart->id }}');"></i>
+                                    </div>
+                                    <script>
+                                        let currentQuantity_{{ $cart->id }} = {{ $cart->total_product }};
+
+                                        function increaseQuantity_{{ $cart->id }}() {
+                                            currentQuantity_{{ $cart->id }} = Math.max(1, currentQuantity_{{ $cart->id }} + 1);
+                                            document.getElementById('{{ $cart->products->slug }}').value = currentQuantity_{{ $cart->id }};
+                                        }
+
+                                        function decreaseQuantity_{{ $cart->id }}() {
+                                            currentQuantity_{{ $cart->id }} = Math.max(1, currentQuantity_{{ $cart->id }} - 1);
+                                            document.getElementById('{{ $cart->products->slug }}').value = currentQuantity_{{ $cart->id }};
+                                        }
+                                    </script>
+
+                                </div>
                             </div>
-                            <script>
-                                let currentQuantity_{{ $cart->id }} = {{ $cart->total_product }};
+                        @endforeach
 
-                                function increaseQuantity_{{ $cart->id }}() {
-                                    currentQuantity_{{ $cart->id }} = Math.max(1, currentQuantity_{{ $cart->id }} + 1);
-                                    document.getElementById('{{ $cart->products->slug }}').value = currentQuantity_{{ $cart->id }};
-                                }
+                        <div class="fixed bottom-0 flex justify-center items-center w-full bg-white"
+                            style="width: 310px;">
+                            <button type="submit" style="width: 100% !important;"
+                                class="text-white text-lg bg-[#2557D6] hover:bg-[#2557D6]/90 focus:ring-4 focus:ring-[#2557D6]/50 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center flex justify-center items-center gap-2 dark:focus:ring-[#2557D6]/50 mb-2">
+                                <span class="font-semibold">CHECKOUT</span>
+                                <i class="fa-solid fa-right-to-bracket"></i>
+                            </button>
+                        </div>
+                    </form>
+                @else
+                    <div class="text-center mt-6">
+                        <h3 style="font-size: 24px; margin-bottom: 4px;">Tidak Ada Daftar Produk!</h3>
+                        <div class="flex justify-center items-center">
+                            <a href="{{ url('/login') }}">
+                                <button type="button"
+                                    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Login</button>
+                            </a>
 
-                                function decreaseQuantity_{{ $cart->id }}() {
-                                    currentQuantity_{{ $cart->id }} = Math.max(1, currentQuantity_{{ $cart->id }} - 1);
-                                    document.getElementById('{{ $cart->products->slug }}').value = currentQuantity_{{ $cart->id }};
-                                }
-                            </script>
-
+                            <a href="{{ url('/register') }}">
+                                <button type="button"
+                                    class="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2 text-center me-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Register</button>
+                            </a>
                         </div>
                     </div>
-                    @endforeach
-
-                    <div class="fixed bottom-0 flex justify-center items-center w-full bg-white"
-                        style="width: 310px;">
-                        <button type="button" style="width: 100% !important;"
-                            class="text-white text-lg bg-[#2557D6] hover:bg-[#2557D6]/90 focus:ring-4 focus:ring-[#2557D6]/50 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center flex justify-center items-center gap-2 dark:focus:ring-[#2557D6]/50 mb-2">
-                            <span class="font-semibold">CHECKOUT</span>
-                            <i class="fa-solid fa-right-to-bracket"></i>
-                        </button>
-                    </div>
-                </form>
-
-                @else
-
-                <div class="text-center mt-6">
-                    <h3 style="font-size: 24px; margin-bottom: 4px;">Tidak Ada Daftar Produk!</h3>
-                    <div class="flex justify-center items-center">
-                        <a href="{{ url('/login') }}">
-                            <button type="button"
-                                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Login</button>
-                        </a>
-
-                        <a href="{{ url('/register') }}">
-                            <button type="button"
-                                class="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2 text-center me-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Register</button>
-                        </a>
-                    </div>
-                </div>
 
                 @endif
             @else
@@ -351,30 +376,76 @@
     <!-- footer section ends -->
 
     {{-- FLOWBITE (FRAMEWORK CSS -TAILWINDCSS) --}}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js">
-        < />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></script>
 
-        <
-        script >
-            document.addEventListener("DOMContentLoaded", function() {
-                limitWords("cart-title", 4); // Ganti "myParagraph" dengan ID atau kelas elemen teks Anda
-            });
+    <script>
+        // document.addEventListener("DOMContentLoaded", function() {
+        //     limitWords("cart-title", 2); //
+        // });
 
-        function limitWords(elementId, wordLimit) {
-            var element = document.getElementById(elementId);
+        // function limitWords(elementId, wordLimit) {
+        //     var element = document.getElementById(elementId);
 
-            if (element) {
-                var words = element.textContent.split(" ");
+        //     if (element) {
+        //         var words = element.textContent.split(" ");
 
-                if (words.length > wordLimit) {
-                    var limitedWords = words.slice(0, wordLimit).join(" ");
-                    element.textContent = limitedWords;
+        //         if (words.length > wordLimit) {
+        //             var limitedWords = words.slice(0, wordLimit).join(" ");
+        //             element.textContent = limitedWords;
 
-                    var warningMessage = document.createElement("span");
-                    warningMessage.textContent = " ...";
-                    element.appendChild(warningMessage);
+        //             var warningMessage = document.createElement("span");
+        //             warningMessage.textContent = " ...";
+        //             element.appendChild(warningMessage);
+        //         }
+        //     }
+        // }
+
+        function deleteCart(cart) {
+            Swal.fire({
+                title: 'Apakah Anda yakin ?',
+                text: 'Anda tidak dapat mengembalikan ini!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Hapus',
+                confirmButtonColor: '#ff3d41',
+                cancelButtonText: 'Batal',
+                cancelButtonColor: '#8fcc34',
+            }).then((result) => {
+                if (result.isConfirmed || result.status == 200) {
+                    axios.delete(`/deleteCart/${cart}`)
+                        .then(response => {
+                            let timerInterval;
+                            Swal.fire({
+                                title: "BERHASIL!",
+                                html: "CART BERHASIL DIHAPUS",
+                                timer: 1000,
+                                icon: 'success',
+                                timerProgressBar: true,
+                                didOpen: () => {
+                                    Swal.showLoading();
+                                    const timer = Swal.getPopup().querySelector("b");
+                                    timerInterval = setInterval(() => {
+                                        timer.textContent = `${Swal.getTimerLeft()}`;
+                                    }, 100);
+                                },
+                                willClose: () => {
+                                    clearInterval(timerInterval);
+                                }
+                            }).then((result) => {
+                                /* Read more about handling dismissals below */
+                                if (result.dismiss === Swal.DismissReason.timer) {
+                                    window.location.reload(true);
+                                }
+                                window.location.reload(true);
+                            });
+                        })
+                        .catch(error => {
+                            console.error(error);
+                            window.location.reload(true);
+
+                        });
                 }
-            }
+            });
         }
     </script>
 </body>

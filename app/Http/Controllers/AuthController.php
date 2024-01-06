@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cart;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,7 +13,12 @@ class AuthController extends Controller
 
     public function loginIndex()
     {
-        return view('pages.auth.login');
+        if (Auth::check()) {
+            $carts = Cart::where('user_id', Auth::user()->id)->get();
+            return view('pages.auth.login', compact('carts'));
+        } else {
+            return view('pages.auth.login');
+        }
     }
 
     public function loginProcess(Request $request)
@@ -32,7 +38,12 @@ class AuthController extends Controller
 
     public function registerIndex()
     {
-        return view('pages.auth.register');
+        if (Auth::check()) {
+            $carts = Cart::where('user_id', Auth::user()->id)->get();
+            return view('pages.auth.register', compact('carts'));
+        } else {
+            return view('pages.auth.register');
+        }
     }
 
     public function registerProcess(Request $request)

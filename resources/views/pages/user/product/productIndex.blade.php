@@ -26,7 +26,7 @@
                         </div>
                     </div>
                     <div class="content">
-                        <h3>{{ $product->name }}</h3>
+                        <h3>{{ $product->name }} ({{ $product->id }})</h3>
                         <div class="price"> Rp {{ number_format($product->price_after) }} <span>Rp
                                 {{ number_format($product->price_before) }}</span> </div>
                     </div>

@@ -37,6 +37,12 @@ class User extends Authenticatable
     //     return $this->belongsToMany(Product::class, 'carts', 'user_id', 'product_id');
     // }
 
+
+
+    public function transactions() {
+        return $this->hasMany(Transaction::class, 'user_id');
+    }
+
     public function sluggable(): array
     {
         return [

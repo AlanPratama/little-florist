@@ -23,8 +23,13 @@ return new class extends Migration
             $table->foreign('product_id')->references('id')->on('products');
 
             $table->string('message')->nullable();
+            $table->integer('total_product');
             $table->integer('total_price');
+
             $table->date('date');
+            $table->date('date_end')->nullable();
+            $table->date('actualDateEnd')->nullable();
+
             $table->string('status')->default('Belum Bayar');
 
             $table->timestamps();

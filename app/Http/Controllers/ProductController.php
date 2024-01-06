@@ -12,15 +12,47 @@ class ProductController extends Controller
     public function productsIndex()
     {
         $products = Product::all();
-        $carts = Cart::where('user_id', Auth::user()->id)->get();
-        return view('pages.user.product.productIndex', compact('products', 'carts'));
+
+        if (Auth::check()) {
+            $carts = Cart::where('user_id', Auth::user()->id)->get();
+            return view('pages.user.product.productIndex', compact('products', 'carts'));
+        } else {
+            return view('pages.user.product.productIndex', compact('products'));
+        }
     }
 
     public function detailProduct($slug)
     {
         $product = Product::where('slug', $slug)->first();
-        return view('pages.user.product.productDetail', compact('product'));
+
+        if (Auth::check()) {
+            $carts = Cart::where('user_id', Auth::user()->id)->get();
+            return view('pages.user.product.productDetail', compact('product', 'carts'));
+        } else {
+            return view('pages.user.product.productDetail', compact('product'));
+        }
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -28,14 +60,31 @@ class ProductController extends Controller
     {
         $productSlug = $request->input('productSlug');
         $product = Product::where('slug', $productSlug)->first();
-        $data = [
-            'user_id' => Auth::user()->id,
-            'product_id' => $product->id,
-        ];
+        $cart = Cart::where('product_id', $product->id)->first();
 
-        Cart::create($data);
+        if ($cart) {
+            $cart->total_product += 1;
+            $cart->update();
+        } else {
+            $data = [
+                'user_id' => Auth::user()->id,
+                'product_id' => $product->id,
+            ];
+
+            Cart::create($data);
+        }
 
         return response()->json(['success' => true, 'message' => 'Produk ditambahkan ke keranjang']);
+    }
+
+
+    public function deleteCart($id)
+    {
+        // Cart::where('id', $id)->delete();
+        Cart::where('id', $id)->where('user_id', Auth::user()->id)->delete();
+
+
+        return response()->json(['status' => 200]);
     }
 
 }

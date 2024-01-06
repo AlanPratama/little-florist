@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
+use App\Models\Transaction;
 use Illuminate\Support\Facades\Route;
 use Psy\Readline\Hoa\Autocompleter;
 
@@ -32,6 +34,10 @@ Route::middleware('auth')->group(function() {
     Route::get('logout', [AuthController::class, 'logout']);
 
     Route::post('/addToCart', [ProductController::class, 'addToCart']);
+    Route::delete('/deleteCart/{id}', [ProductController::class, 'deleteCart'])->name('cart.destroy');
+
+    Route::post('/transaction.start', [TransactionController::class, 'start'])->name('transaction.start');
+    Route::get('/transaksi-detail', [TransactionController::class, 'detail'])->name('transaction.detail');
 
 
 });

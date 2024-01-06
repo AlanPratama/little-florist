@@ -19,6 +19,7 @@ return new class extends Migration
 
             $table->unsignedBigInteger('product_id');
             $table->foreign('product_id')->references('id')->on('products');
+            $table->integer('total_product')->default(1);
 
             $table->timestamps();
         });

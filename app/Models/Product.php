@@ -34,6 +34,12 @@ class Product extends Model
     //     return $this->belongsToMany(User::class, 'carts', 'product_id', 'user_id');
     // }
 
+
+
+    public function transactions() {
+        return $this->hasMany(Transaction::class, 'product_id');
+    }
+
     public function sluggable(): array
     {
         return [
