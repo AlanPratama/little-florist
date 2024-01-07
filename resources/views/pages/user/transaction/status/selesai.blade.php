@@ -111,6 +111,9 @@
                                 $takeInfo[] = $item->code;
                             @endphp
                             <p class="text-gray-500 dark:text-gray-400">
+                                <span class="font-bold">Tanggal Selesai: </span> {{ \Carbon\Carbon::parse($item->date_end)->format('d F Y') }}
+                            </p>
+                            <p class="text-gray-500 dark:text-gray-400">
                                 <span class="font-bold">Pesan: </span>
                                 @if ($item->message != null)
                                     {{ $item->message }}

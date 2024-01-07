@@ -136,12 +136,12 @@
                             <div class="flex justify-evenly items-start my-6">
                                 <div class="w-auto rounded shadow" style="margin-right: 10px;">
                                     <img src="{{ $cart->products->image_asset == 'YA' ? asset('assets/' . $cart->products->image) : $cart->products->image }}"
-                                        alt="product" class="" style="aspect-ratio: 1/1; width: 100px; ">
+                                        alt="product" class="" style="aspect-ratio: 1/1; width: 100px; min-width: 100px; max-width: 100px; ">
                                 </div>
                                 <div class="w-auto pl-1 flex flex-col items-start justify-start">
 
                                     <h3 class="" style="font-size: 17px;" id="cart-title">
-                                        {{ $cart->products->name }} ({{ $cart->products->id }})</h3>
+                                        {{ $cart->products->name }}</h3>
 
                                     <p class="" style="color: #e84393; font-weight: 600; font-size: 16px;">Rp
                                         {{ number_format($cart->products->price_after) }}</p>

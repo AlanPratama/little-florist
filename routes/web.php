@@ -44,6 +44,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/transaksi-detail', [TransactionController::class, 'detail'])->name('transaction.detail');
     Route::get('/transaksi-detail-now', [TransactionController::class, 'detailNow'])->name('transaction.detail.now');
 
+    Route::delete('/cancelTransaction/{code}', [TransactionController::class, 'cancelTransaction'])->name('cancel.transaction');
+
     Route::post('/transaction.order', [TransactionController::class, 'order'])->name('transaction.order');
     Route::post('/transaction.order.now', [TransactionController::class, 'orderNow'])->name('transaction.order.now');
 

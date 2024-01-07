@@ -133,9 +133,9 @@
                                 <a href="{{ url('/transaksi/dikirim/'.$firstItem->code) }}" class="font-medium flex justify-center items-center w-auto text-white bg-blue-500 px-1 py-1.5 rounded dark:text-blue-500 hover:underline">
                                     <i class="fa-solid fa-eye"></i>
                                 </a>
-                                <a href="#" class="font-medium flex justify-center items-center w-auto text-white bg-green-500 px-1 py-1.5 rounded dark:text-blue-500 hover:underline">
+                                {{-- <a href="#" class="font-medium flex justify-center items-center w-auto text-white bg-green-500 px-1 py-1.5 rounded dark:text-blue-500 hover:underline">
                                     <i class="fa-solid fa-gear"></i>
-                                </a>
+                                </a> --}}
                             </td>
                         </tr>
                     @endforeach

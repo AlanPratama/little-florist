@@ -27,7 +27,11 @@ class AuthController extends Controller
         $rememberToken = $request->has('remember_token');
 
         if (Auth::attempt($credentials, $rememberToken)) {
-            return redirect()->intended('/')->with('berhasil', 'BERHASIL LOGIN');
+            if (Auth::user()->role == 'User') {
+                return redirect()->intended('/produk')->with('berhasil', 'BERHASIL LOGIN');
+            } else {
+                return redirect()->intended('/admin/dashboard')->with('berhasil', 'BERHASIL LOGIN');
+            }
         } else {
             return back()->withInput($request->only('username', 'remember_token')) ->with('gagal', 'USERNAME ATAU PASSWORD SALAH!');
         }

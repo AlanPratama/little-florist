@@ -117,6 +117,57 @@
                                     </div>
                                 </div>
 
+                                <button type="button"
+                                class="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-semibold rounded-lg text-sm px-3 py-2 text-center" onclick="event.preventDefault(); cancelTransaction('{{ $item->code }}');">Cancel</button>
+
+                            <script>
+                                function cancelTransaction(transaction) {
+                                    Swal.fire({
+                                        title: 'Apakah Anda yakin ?',
+                                        text: 'Anda tidak dapat mengembalikan ini!',
+                                        icon: 'warning',
+                                        showCancelButton: true,
+                                        confirmButtonText: 'Hapus',
+                                        confirmButtonColor: '#ff3d41',
+                                        cancelButtonText: 'Batal',
+                                        cancelButtonColor: '#8fcc34',
+                                    }).then((result) => {
+                                        if (result.isConfirmed || result.status == 200) {
+                                            axios.delete(`/cancelTransaction/${transaction}`)
+                                                .then(response => {
+                                                    let timerInterval;
+                                                    Swal.fire({
+                                                        title: "BERHASIL!",
+                                                        html: "TRANSACTION DIBATALKAN!",
+                                                        timer: 1000,
+                                                        icon: 'success',
+                                                        timerProgressBar: true,
+                                                        didOpen: () => {
+                                                            Swal.showLoading();
+                                                            const timer = Swal.getPopup().querySelector("b");
+                                                            timerInterval = setInterval(() => {
+                                                                timer.textContent = `${Swal.getTimerLeft()}`;
+                                                            }, 100);
+                                                        },
+                                                        willClose: () => {
+                                                            clearInterval(timerInterval);
+                                                        }
+                                                    }).then((result) => {
+                                                        if (result.dismiss === Swal.DismissReason.timer) {
+                                                            window.location.href = '/produk';
+                                                        }
+                                                        window.location.href = '/produk';
+                                                    });
+                                                })
+                                                .catch(error => {
+                                                    console.error(error);
+                                                    window.location.reload(true);
+
+                                                });
+                                        }
+                                    });
+                                }
+                            </script>
 
                             </div>
                         @endif
@@ -161,6 +212,9 @@
                             @php
                                 $takeInfo[] = $item->code;
                             @endphp
+                            <p class="text-gray-500 dark:text-gray-400">
+                                <span class="font-bold">Estimasi: </span> {{ \Carbon\Carbon::parse($item->date_end)->format('d F Y') }}
+                            </p>
                             <p class="text-gray-500 dark:text-gray-400">
                                 <span class="font-bold">Pesan: </span>
                                 @if ($item->message != null)

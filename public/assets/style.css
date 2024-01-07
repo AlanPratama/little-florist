@@ -1,3 +1,10 @@
+.colReverse {
+    display: flex;
+    flex-direction: column-reverse;
+    width: 100%;;
+}
+
+
 :root {
     --pink: rgb(238, 75, 156);
 }
