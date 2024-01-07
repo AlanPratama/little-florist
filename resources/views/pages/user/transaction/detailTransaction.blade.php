@@ -1,6 +1,6 @@
 @extends('layouts.user')
 
-@section('title', 'Homepage')
+@section('title', 'Detail Transaksi')
 
 @section('content')
     <style>
@@ -131,21 +131,10 @@
                         <form action="{{ route('transaction.order') }}" method="post">
                             @csrf
 
-                            @php
-                                $totalSold = 0;
-                                $totalProducts = 0;
-                            @endphp
                             @foreach ($products as $produk)
                                 <input type="hidden" name="products[]" value="{{ $produk->id }}">
                                 <input type="hidden" name="sold[]" value="{{ $soldArray[$loop->index] }}">
-                                @php
-                                    $totalSold += $soldArray[$loop->index];
-                                    $totalProducts += 1;
-                                @endphp
                             @endforeach
-                            <input type="hidden" name="total_sold" value="{{ $totalSold }}">
-                            <input type="hidden" name="total_products" value="{{ $totalProducts }}">
-                            <input type="hidden" name="total_price" value="{{ $totalPrice }}">
 
                             <div
                                 class="w-full mb-4 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">

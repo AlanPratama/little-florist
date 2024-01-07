@@ -1,6 +1,6 @@
 @extends('layouts.user')
 
-@section('title', 'Homepage')
+@section('title', 'Produk')
 
 @section('content')
     <section class="products mt-14" id="pricelist">

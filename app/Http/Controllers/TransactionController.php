@@ -39,9 +39,8 @@ class TransactionController extends Controller
 
     public function order(Request $request)
     {
-        $idProducts = $request->products;
         $soldArray = $request->sold;
-        $code = Str::random(5) . '-' . Auth::user()->username . '-' . Carbon::now();
+        $code = Str::random(6) . '-' . Auth::user()->username . '-' . Carbon::now()->toDateString();
 
         $carts = Cart::whereIn('product_id', $request->products)
             ->orderByRaw("FIELD(id, " . implode(',', $request->products) . ")")
@@ -70,23 +69,30 @@ class TransactionController extends Controller
             $item->save();
         }
 
-        foreach ($request->products as $product) {
+        foreach ($products as $index => $product) {
+            $totalPrice = $product->price_after * $soldArray[$index];
             $data = [
                 'code' => $code,
                 'user_id' => Auth::user()->id,
-                'product_id' => $product,
+                'product_id' => $product->id,
                 'message' => $request->message,
                 'address' => $request->address,
-                'total_price' => $request->total_price,
-                'total_product' => $request->total_sold,
+                'total_price' => $totalPrice,
+                'total_product' => $soldArray[$index],
                 'date' => Carbon::now()->toDateString(),
                 'status' => 'Belum Bayar',
             ];
             Transaction::create($data);
         }
 
-        dd('BERHASIL');
+        return redirect('transaksi/belum-bayar/'.$code)->with('berhasil', 'Berhasil Membuat Order');
     }
+
+
+
+
+
+
 
 
 
@@ -120,7 +126,7 @@ class TransactionController extends Controller
 
     public function orderNow(Request $request)
     {
-        $code = Str::random(5) . '-' . Auth::user()->username . '-' . Carbon::now();
+        $code = Str::random(6) . '-' . Auth::user()->username . '-' . Carbon::now()->toDateString();
         $sold = $request->sold;
 
 
@@ -148,6 +154,41 @@ class TransactionController extends Controller
         ];
         Transaction::create($data);
 
-        dd('BERHASIL');
+        return redirect('transaksi/belum-bayar/'.$code)->with('berhasil', 'Berhasil Membuat Order');
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public function transactionIndex()
+    {
+
+    }
+
+
+    public function belumBayarDetail($code)
+    {
+        $transaction = Transaction::where('code', $code)->where('status', 'Belum Bayar')->get();
+        $products = Transaction::where('status', 'Belum Bayar')->get();
+        if (Auth::user()) {
+            $carts = Cart::where('user_id', Auth::user()->id)->get();
+            return view('pages.user.transaction.belumBayar.belumBayar', compact('carts', 'transaction', 'products'));
+        } else {
+            return view('pages.user.transaction.belumBayar.belumBayar');
+        }
     }
 }

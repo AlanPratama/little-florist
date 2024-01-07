@@ -5,6 +5,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
 use App\Models\Transaction;
+use Illuminate\Database\Events\TransactionCommitted;
 use Illuminate\Support\Facades\Route;
 use Psy\Readline\Hoa\Autocompleter;
 
@@ -44,6 +45,15 @@ Route::middleware('auth')->group(function() {
 
     Route::post('/transaction.order', [TransactionController::class, 'order'])->name('transaction.order');
     Route::post('/transaction.order.now', [TransactionController::class, 'orderNow'])->name('transaction.order.now');
+
+
+
+    // GET DATA TRANSACTION
+    Route::get('/transaksi', [TransactionController::class, 'transactionIndex']);
+    Route::prefix('/transaksi')->group(function() {
+        Route::get('/belum-bayar', [TransactionController::class, 'belumBayarIndex']);
+        Route::get('/belum-bayar/{code}', [TransactionController::class, 'belumBayarDetail']);
+    });
 
 
 
