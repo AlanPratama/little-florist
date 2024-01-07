@@ -1,8 +1,20 @@
 @extends('layouts.user')
 
-@section('title', 'Homepage')
+@section('title', 'Diproses')
 
 @section('content')
+
+    <style>
+        .smHidden {
+            display: inline-block;
+        }
+
+        @media(max-width: 640px) {
+            .smHidden {
+                display: none;
+            }
+        }
+    </style>
 
     <div class="w-full flex justify-center items-center" style="margin: 110px 0px;">
         <div class="flex flex-col justify-center items-start" style="width: 85%;">
@@ -12,24 +24,34 @@
                     class="flex md:w-full items-center text-blue-600 dark:text-blue-500 sm:after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-200 after:border-1 after:hidden sm:after:inline-block after:mx-6 xl:after:mx-10 dark:after:border-gray-700">
                     <span
                         class="flex items-center after:content-['/'] sm:after:hidden after:mx-2 after:text-gray-200 dark:after:text-gray-500">
+                        <i class="fa-solid fa-credit-card w-3.5 h-3.5 sm:w-4 sm:h-4 me-2.5"></i>
+                        Belum <span class="hidden sm:inline-flex sm:ms-2">Bayar</span>
+                    </span>
+                </li>
+                <li
+                    class="flex md:w-full items-center text-blue-600 dark:text-blue-500 sm:after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-200 after:border-1 after:hidden sm:after:inline-block after:mx-6 xl:after:mx-10 dark:after:border-gray-700">
+                    <span
+                        class="flex items-center after:content-['/'] sm:after:hidden after:mx-2 after:text-gray-200 dark:after:text-gray-500">
+                        <i class="fa-solid fa-book-open-reader w-3.5 h-3.5 sm:w-4 sm:h-4 me-2.5"></i>
+                        Sedang <span class="hidden sm:inline-flex sm:ms-2">Diproses</span>
+                    </span>
+                </li>
+                <li
+                    class="flex md:w-full items-center text-blue-600 dark:text-blue-500 sm:after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-200 after:border-1 after:hidden sm:after:inline-block after:mx-6 xl:after:mx-10 dark:after:border-gray-700">
+                    <span
+                        class="flex items-center after:content-['/'] sm:after:hidden after:mx-2 after:text-gray-200 dark:after:text-gray-500">
+                        <i class="fa-solid fa-truck-fast w-3.5 h-3.5 sm:w-4 sm:h-4 me-2.5"></i>
+                        Sedang <span class="hidden sm:inline-flex sm:ms-2">Dikirim</span>
+                    </span>
+                </li>
+                <li class="flex items-center">
+                    <span
+                        class="flex items-center after:content-['/'] sm:after:hidden after:mx-2 after:text-gray-200 dark:after:text-gray-500">
                         <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 me-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                             fill="currentColor" viewBox="0 0 20 20">
                             <path
                                 d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
                         </svg>
-                        Belum <span class="hidden sm:inline-flex sm:ms-2">Bayar</span>
-                    </span>
-                </li>
-                <li
-                    class="flex md:w-full items-center after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-200 after:border-1 after:hidden sm:after:inline-block after:mx-6 xl:after:mx-10 dark:after:border-gray-700">
-                    <span
-                        class="flex items-center after:content-['/'] sm:after:hidden after:mx-2 after:text-gray-200 dark:after:text-gray-500">
-                        <span class="me-2">2</span>
-                        Sedang <span class="hidden sm:inline-flex sm:ms-2">Diproses</span>
-                    </span>
-                </li>
-                <li class="flex items-center">
-                    <span class="me-2">3</span>
                     Selesai
                 </li>
             </ol>
@@ -46,6 +68,59 @@
                         <div class="">
                             <span class="font-semibold text-xl">Kode:</span> {{ $item->code }}
                         </div>
+
+                        @if (Auth::user()->role == 'Admin')
+                            <div class="">
+                                <button type="button"
+                                    class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-semibold rounded-lg text-sm px-3 py-2 text-center" data-modal-target="accept-modal" data-modal-toggle="accept-modal">Dikirim</button>
+                                <!-- Main modal -->
+                                <div id="accept-modal" tabindex="-1" aria-hidden="true"
+                                    class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                                    <div class="relative p-4 w-full max-w-md max-h-full">
+                                        <!-- Modal content -->
+                                        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                                            <!-- Modal header -->
+                                            <div
+                                                class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                                                <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                                                    Kode: {{ $item->code }}
+                                                </h3>
+                                                <button type="button"
+                                                    class="end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                                                    data-modal-hide="accept-modal">
+                                                    <svg class="w-3 h-3" aria-hidden="true"
+                                                        xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                        viewBox="0 0 14 14">
+                                                        <path stroke="currentColor" stroke-linecap="round"
+                                                            stroke-linejoin="round" stroke-width="2"
+                                                            d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                                    </svg>
+                                                    <span class="sr-only">Close modal</span>
+                                                </button>
+                                            </div>
+                                            <!-- Modal body -->
+                                            <div class="p-4 md:p-5">
+                                                <form class="space-y-4" action="{{ route('transaction.send', ['code' => $item->code]) }}" method="POST">
+                                                    @csrf
+                                                    {{-- <div>
+                                                        <label for="email"
+                                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tanggal Selesai</label>
+                                                        <input type="date" name="date_end" id="date_end"
+                                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                                                            placeholder="Tanggal Selesai" required>
+                                                    </div> --}}
+                                                    <button type="submit" class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Submit</button>
+
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        @endif
+
                         <div class="">
                             <span class="font-semibold text-xl">Tanggal:</span> {{ $item->date }}
                         </div>
@@ -86,14 +161,14 @@
                             @php
                                 $takeInfo[] = $item->code;
                             @endphp
-                                <p class="text-gray-500 dark:text-gray-400">
-                                    <span class="font-bold">Pesan: </span>
-                                    @if ($item->message != null)
+                            <p class="text-gray-500 dark:text-gray-400">
+                                <span class="font-bold">Pesan: </span>
+                                @if ($item->message != null)
                                     {{ $item->message }}
-                                    @else
+                                @else
                                     -
-                                    @endif
-                                </p>
+                                @endif
+                            </p>
                             <p class="text-gray-500 dark:text-gray-400">
                                 <span class="font-bold">Alamat: </span> {{ $item->address }}
                             </p>
@@ -103,8 +178,9 @@
 
                     @foreach ($transaction as $item)
                         <p class="flex justify-start items-center gap-1 mb-3 text-gray-500 dark:text-gray-400">
-                            <svg class="flex-shrink-0 w-3.5 h-3.5 text-blue-600 dark:text-blue-500" aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                            <svg class="smHidden flex-shrink-0 w-3.5 h-3.5 text-blue-600 dark:text-blue-500"
+                                aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                viewBox="0 0 20 20">
                                 <path
                                     d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
                             </svg>
@@ -113,7 +189,7 @@
                             @endphp
                             <span class="font-semibold">{{ $item->products->name }}:</span> Rp
                             {{ number_format($totalHarga) }}
-                            ({{ $item->total_product }} PCS)
+                            <span class="smHidden">({{ $item->total_product }} PCS)</span>
                         </p>
                     @endforeach
                     <hr style="height: 2px" class="my-2 bg-gray-400 border-0 dark:bg-gray-700">
@@ -162,7 +238,8 @@
                                     <a href="{{ url('https://wa.me/+6285817000942?text=Hallo%20Admin!%20Saya%20Sudah%20Order%20di%20Little%20Florist,%20Ini%20Kode%20Pembayaran-nya%20*' . $item->code . '*') }}"
                                         target="_blank" class="w-auto mt-1">
                                         <button type="button"
-                                            class="text-sm bg-green-500 text-white px-2 py-1 rounded">Hubungi Admin</button>
+                                            class="text-sm bg-green-500 text-white px-2 py-1 rounded">Hubungi
+                                            Admin</button>
                                     </a>
                                 </li>
                                 <li class="ms-6">

@@ -85,7 +85,7 @@ class TransactionController extends Controller
             Transaction::create($data);
         }
 
-        return redirect('transaksi/belum-bayar/'.$code)->with('berhasil', 'Berhasil Membuat Order');
+        return redirect('transaksi/belum-bayar/' . $code)->with('berhasil', 'Berhasil Membuat Order');
     }
 
 
@@ -154,7 +154,7 @@ class TransactionController extends Controller
         ];
         Transaction::create($data);
 
-        return redirect('transaksi/belum-bayar/'.$code)->with('berhasil', 'Berhasil Membuat Order');
+        return redirect('transaksi/belum-bayar/' . $code)->with('berhasil', 'Berhasil Membuat Order');
     }
 
 
@@ -176,19 +176,63 @@ class TransactionController extends Controller
 
     public function transactionIndex()
     {
+        $belumBayar = Transaction::where('user_id', Auth::user()->id)
+            ->orderBy('date', 'desc')->where('status', 'Belum Bayar')->get();
 
+
+        $diproses = Transaction::where('user_id', Auth::user()->id)
+            ->orderBy('date', 'desc')->where('status', 'Diproses')->get();
+
+        $selesai = Transaction::where('user_id', Auth::user()->id)
+            ->orderBy('date', 'desc')->where('status', 'Selesai')->get();
+
+        $carts = Cart::where('user_id', Auth::user()->id)->get();
+
+        return view('pages.user.transaction.collectionOfTransaction', compact('belumBayar', 'diproses', 'selesai', 'carts'));
     }
 
 
     public function belumBayarDetail($code)
     {
         $transaction = Transaction::where('code', $code)->where('status', 'Belum Bayar')->get();
-        $products = Transaction::where('status', 'Belum Bayar')->get();
-        if (Auth::user()) {
+
+        if ($transaction) {
+            $products = Transaction::where('status', 'Belum Bayar')->get();
             $carts = Cart::where('user_id', Auth::user()->id)->get();
-            return view('pages.user.transaction.belumBayar.belumBayar', compact('carts', 'transaction', 'products'));
+
+            return view('pages.user.transaction.status.belumBayar', compact('carts', 'transaction', 'products'));
         } else {
-            return view('pages.user.transaction.belumBayar.belumBayar');
+            return redirect()->back();
+        }
+    }
+
+
+    public function diprosesDetail($code)
+    {
+        $transaction = Transaction::where('code', $code)->where('status', 'Diproses')->get();
+
+        if ($transaction) {
+            $products = Transaction::where('status', 'Diproses')->get();
+            $carts = Cart::where('user_id', Auth::user()->id)->get();
+
+            return view('pages.user.transaction.status.diproses', compact('carts', 'transaction', 'products'));
+        } else {
+            return redirect()->back();
+        }
+    }
+
+
+    public function selesaiDetail($code)
+    {
+        $transaction = Transaction::where('code', $code)->where('status', 'Selesai')->get();
+
+        if ($transaction) {
+            $products = Transaction::where('status', 'Selesai')->get();
+            $carts = Cart::where('user_id', Auth::user()->id)->get();
+
+            return view('pages.user.transaction.status.selesai', compact('carts', 'transaction', 'products'));
+        } else {
+            return redirect()->back();
         }
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\TransactionController;
@@ -31,7 +32,7 @@ Route::get('/', [UserController::class, 'homepage']);
 Route::get('/produk', [ProductController::class, 'productsIndex']);
 Route::get('/produk/{slug}', [ProductController::class, 'detailProduct']);
 
-Route::middleware('auth')->group(function() {
+Route::middleware('auth')->group(function () {
     Route::get('logout', [AuthController::class, 'logout']);
 
     Route::post('/addToCart', [ProductController::class, 'addToCart']);
@@ -50,11 +51,32 @@ Route::middleware('auth')->group(function() {
 
     // GET DATA TRANSACTION
     Route::get('/transaksi', [TransactionController::class, 'transactionIndex']);
-    Route::prefix('/transaksi')->group(function() {
-        Route::get('/belum-bayar', [TransactionController::class, 'belumBayarIndex']);
+    Route::prefix('/transaksi')->group(function () {
         Route::get('/belum-bayar/{code}', [TransactionController::class, 'belumBayarDetail']);
+        Route::get('/diproses/{code}', [TransactionController::class, 'diprosesDetail']);
+        Route::get('/selesai/{code}', [TransactionController::class, 'selesaiDetail']);
     });
 
 
 
+
+    Route::middleware('only_admin')->prefix('admin')->group(function () {
+        Route::get('/dashboard', [AdminController::class, 'dashboard']);
+
+        Route::prefix('transaksi')->group(function () {
+            Route::get('/belum-bayar', [AdminController::class, 'belumBayar']);
+            Route::post('transaction.process.{code}', [AdminController::class, 'transactionProcess'])->name('transaction.process');
+
+            Route::get('/diproses', [AdminController::class, 'diproses']);
+            Route::post('transaction.send.{code}', [AdminController::class, 'transactionSend'])->name('transaction.send');
+
+            Route::get('/dikirim', [AdminController::class, 'dikirim']);
+
+
+
+            Route::get('/selesai', [AdminController::class, 'selesai']);
+
+
+        });
+    });
 });
