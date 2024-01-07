@@ -23,8 +23,8 @@
                     <li class="me-2" role="presentation">
                         <button
                             class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
-                            id="settings-tab" data-tabs-target="#settings" type="button" role="tab"
-                            aria-controls="settings" aria-selected="false">Dikirim</button>
+                            id="dikirim-tab" data-tabs-target="#dikirim" type="button" role="tab"
+                            aria-controls="dikirim" aria-selected="false">Dikirim</button>
                     </li>
                     <li class="me-2" role="presentation">
                         <button
@@ -143,8 +143,8 @@
 
 
                 {{-- DIKIRIM --}}
-                {{-- <div class="hidden flex flex-wrap justify-evenly items-center gap-4 p-4 rounded-lg bg-gray-50 dark:bg-gray-800"
-                    id="dashboard" role="tabpanel" aria-labelledby="dashboard-tab">
+                <div class="hidden flex flex-wrap justify-evenly items-center gap-4 p-4 rounded-lg bg-gray-50 dark:bg-gray-800"
+                    id="dikirim" role="tabpanel" aria-labelledby="dikirim-tab">
                     @if ($dikirim->count() > 0)
                         @php
                             $arrayDikirim = [];
@@ -172,7 +172,7 @@
                                             <p>{{ $item->date }}</p>
 
                                         </div>
-                                        <a href="{{ url('/transaksi/diproses/' . $item->code) }}"
+                                        <a href="{{ url('/transaksi/dikirim/' . $item->code) }}"
                                             class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                                             Lihat
                                             <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true"
@@ -191,7 +191,7 @@
                             <p>TIDAK ADA DATA TRANSAKSI</p>
                         </div>
                     @endif
-                </div> --}}
+                </div>
 
 
 
@@ -225,7 +225,7 @@
                                     <p>{{ $item->date }}</p>
 
                                 </div>
-                                <a href="{{ url('/transaksi/belum-bayar/' . $item->code) }}"
+                                <a href="{{ url('/transaksi/selesai/' . $item->code) }}"
                                     class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                                     Lihat
                                     <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true"

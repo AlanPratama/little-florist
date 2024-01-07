@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Transaction;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
@@ -66,7 +68,7 @@ class AdminController extends Controller
             $item->save();
         }
 
-        return redirect('/admin/transaksi/dikirim')->with('berhasil', 'STATUS TRANSAKSI TELAH DIKIRIM');
+        return redirect('/admin/transaksi/diproses')->with('berhasil', 'STATUS TRANSAKSI TELAH DIKIRIM');
     }
 
 
@@ -84,6 +86,10 @@ class AdminController extends Controller
 
         return view('pages.admin.transactions.dikirim', compact('dikirim'));
     }
+
+
+
+    // TRANSACTION DONE WRITTED IN TRANSACTION CONTROLLER
 
 
 

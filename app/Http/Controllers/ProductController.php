@@ -11,7 +11,7 @@ class ProductController extends Controller
 {
     public function productsIndex()
     {
-        $products = Product::all();
+        $products = Product::orderBy('sold', 'desc')->get();
 
         if (Auth::check()) {
             $carts = Cart::where('user_id', Auth::user()->id)->get();

@@ -183,13 +183,20 @@ class TransactionController extends Controller
         $diproses = Transaction::where('user_id', Auth::user()->id)
             ->orderBy('date', 'desc')->where('status', 'Diproses')->get();
 
+        $dikirim = Transaction::where('user_id', Auth::user()->id)
+            ->orderBy('date', 'desc')->where('status', 'Dikirim')->get();
+
         $selesai = Transaction::where('user_id', Auth::user()->id)
             ->orderBy('date', 'desc')->where('status', 'Selesai')->get();
 
         $carts = Cart::where('user_id', Auth::user()->id)->get();
 
-        return view('pages.user.transaction.collectionOfTransaction', compact('belumBayar', 'diproses', 'selesai', 'carts'));
+        return view('pages.user.transaction.collectionOfTransaction', compact('belumBayar', 'diproses', 'dikirim', 'selesai', 'carts'));
     }
+
+
+
+
 
 
     public function belumBayarDetail($code)
@@ -220,6 +227,49 @@ class TransactionController extends Controller
             return redirect()->back();
         }
     }
+
+    public function dikirimDetail($code)
+    {
+        $transaction = Transaction::where('code', $code)->where('status', 'Dikirim')->get();
+
+        if ($transaction) {
+            $products = Transaction::where('status', 'Dikirim')->get();
+            $carts = Cart::where('user_id', Auth::user()->id)->get();
+
+            return view('pages.user.transaction.status.dikirim', compact('carts', 'transaction', 'products'));
+        } else {
+            return redirect()->back();
+        }
+    }
+
+
+
+
+
+    // THIS FUNCTION IS FOR CHANGE THE TRANSACTION STATUS FROM 'DIKIRIM' TO 'SELESAI'... DIKIRIM => SELESAI
+    public function transactionDone($code)
+    {
+        $transacition = Transaction::where('code', $code)
+            ->where('status', 'Dikirim')
+            ->get();
+
+        foreach ($transacition as $item) {
+            $item->actualDateEnd = Carbon::now()->toDateString();
+            $item->status = 'Selesai';
+            $item->save();
+        }
+
+        if (Auth::user()->role == 'Admin') {
+            return redirect('/admin/transaksi/dikirim')->with('berhasil', 'TRANSAKSI TELAH SELESAI');
+        } else {
+            return redirect('/produk')->with('berhasil', 'TRANSAKSI TELAH SELESAI');
+        }
+    }
+
+
+
+
+
 
 
     public function selesaiDetail($code)

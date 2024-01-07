@@ -1,6 +1,6 @@
 @extends('layouts.user')
 
-@section('title', 'Diproses')
+@section('title', 'Dikirim')
 
 @section('content')
 
@@ -37,7 +37,7 @@
                     </span>
                 </li>
                 <li
-                    class="flex md:w-full items-center sm:after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-200 after:border-1 after:hidden sm:after:inline-block after:mx-6 xl:after:mx-10 dark:after:border-gray-700">
+                    class="flex md:w-full items-center text-blue-600 dark:text-blue-500 sm:after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-200 after:border-1 after:hidden sm:after:inline-block after:mx-6 xl:after:mx-10 dark:after:border-gray-700">
                     <span
                         class="flex items-center after:content-['/'] sm:after:hidden after:mx-2 after:text-gray-200 dark:after:text-gray-500">
                         <i class="fa-solid fa-truck-fast w-3.5 h-3.5 sm:w-4 sm:h-4 me-2.5"></i>
@@ -69,7 +69,7 @@
                             <span class="font-semibold text-xl">Kode:</span> {{ $item->code }}
                         </div>
 
-                        @if (Auth::user()->role == 'Admin')
+                        @if (Auth::user()->role == 'Admin' || $item->user_id == Auth::user()->id)
                             <div class="">
                                 <button type="button"
                                     class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-semibold rounded-lg text-sm px-3 py-2 text-center" data-modal-target="accept-modal" data-modal-toggle="accept-modal">Dikirim</button>
@@ -100,7 +100,7 @@
                                             </div>
                                             <!-- Modal body -->
                                             <div class="p-4 md:p-5">
-                                                <form class="space-y-4" action="{{ route('transaction.send', ['code' => $item->code]) }}" method="POST">
+                                                <form class="space-y-4" action="{{ route('transaction.done', ['code' => $item->code]) }}" method="POST">
                                                     @csrf
                                                     {{-- <div>
                                                         <label for="email"

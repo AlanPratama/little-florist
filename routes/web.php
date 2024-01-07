@@ -54,6 +54,11 @@ Route::middleware('auth')->group(function () {
     Route::prefix('/transaksi')->group(function () {
         Route::get('/belum-bayar/{code}', [TransactionController::class, 'belumBayarDetail']);
         Route::get('/diproses/{code}', [TransactionController::class, 'diprosesDetail']);
+
+
+        Route::get('/dikirim/{code}', [TransactionController::class, 'dikirimDetail']);
+        Route::post('transaction.done.{code}', [TransactionController::class, 'transactionDone'])->name('transaction.done');
+
         Route::get('/selesai/{code}', [TransactionController::class, 'selesaiDetail']);
     });
 

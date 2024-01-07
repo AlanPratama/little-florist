@@ -144,7 +144,7 @@
                         <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
                             {{ $item->products->name }}</h5>
                         <p class="font-normal text-gray-700 dark:text-gray-400">Jumlah: {{ $item->total_product }}</p>
-                        <p class="font-normal text-gray-700 dark:text-gray-400">Harga: {{ $item->total_price }}</p>
+                        <p class="font-normal text-gray-700 dark:text-gray-400">Harga: Rp {{ number_format($item->total_price) }}</p>
 
                     </div>
                 </div>

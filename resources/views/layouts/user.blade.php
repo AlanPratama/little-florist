@@ -49,7 +49,7 @@
                 aria-controls="cart-right-drawer" class="fa-solid fa-cart-shopping"></i>
             @if (!Auth::user())
                 <a href="{{ url('/login') }}">
-                    <i class="fa-solid fa-right-to-bracket"></i>
+                    <i class="fa-solid fa-person-walking-arrow-right"></i>
                 </a>
             @endif
         </div>
@@ -139,14 +139,16 @@
                                         alt="product" class="" style="aspect-ratio: 1/1; width: 100px; ">
                                 </div>
                                 <div class="w-auto pl-1 flex flex-col items-start justify-start">
+
                                     <h3 class="" style="font-size: 17px;" id="cart-title">
                                         {{ $cart->products->name }} ({{ $cart->products->id }})</h3>
+
                                     <p class="" style="color: #e84393; font-weight: 600; font-size: 16px;">Rp
                                         {{ number_format($cart->products->price_after) }}</p>
-                                    {{-- <label for="quantity-input"
-                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Choose
-                            quantity:</label> --}}
+
+
                                     <div class="relative flex items-center max-w-[8rem]">
+
                                         <button type="button" id="decrement-button"
                                             data-input-counter-decrement="quantity-input"
                                             onclick="decreaseQuantity_{{ $cart->id }}()"
@@ -157,16 +159,17 @@
                                                     stroke-linejoin="round" stroke-width="2" d="M1 1h16" />
                                             </svg>
                                         </button>
-                                        <input type="text"
-                                            value="{{ $cart->products->id }}"
-                                            name="product[]" class="bg-gray-50 border-x-0 border-gray-300 hidden text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+
+                                        <input type="text" value="{{ $cart->products->id }}" name="product[]"
+                                            class="bg-gray-50 border-x-0 border-gray-300 hidden text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                             placeholder="1" readonly required>
+
                                         <input type="text" id="{{ $cart->products->slug }}" data-input-counter
-                                            value="{{ $cart->total_product }}"
-                                            name="sold[]"
+                                            value="{{ $cart->total_product }}" name="sold[]"
                                             aria-describedby="helper-text-explanation"
                                             class="bg-gray-50 border-x-0 border-gray-300 text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                             placeholder="1" readonly required>
+
                                         <button type="button" id="increment-button"
                                             onclick="increaseQuantity_{{ $cart->id }}()"
                                             data-input-counter-increment="quantity-input"
@@ -178,10 +181,14 @@
                                                     stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16" />
                                             </svg>
                                         </button>
+
                                         <i class="ml-1 text-md fa-solid fa-trash-can bg-red-500 text-white dark:bg-red-700 dark:hover:bg-red-600 dark:border-gray-600 hover:bg-red-600 border border-gray-300 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none"
                                             style="padding: 6px;"
                                             onclick="event.preventDefault(); deleteCart('{{ $cart->id }}');"></i>
+
                                     </div>
+
+
                                     <script>
                                         let currentQuantity_{{ $cart->id }} = {{ $cart->total_product }};
 
@@ -214,7 +221,9 @@
                         <h3 style="font-size: 24px; margin-bottom: 4px;">Tidak Ada Daftar Produk!</h3>
                         <div class="flex justify-center items-center">
                             <a href="{{ url('/produk') }}">
-                                <button type="button" class="text-white text-lg font-semibold bg-green-500 hover:bg-green-600 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-3 py-2 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 focus:outline-none dark:focus:ring-green-800">Lihat Produk</button>
+                                <button type="button"
+                                    class="text-white text-lg font-semibold bg-green-500 hover:bg-green-600 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-3 py-2 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 focus:outline-none dark:focus:ring-green-800">Lihat
+                                    Produk</button>
                             </a>
                         </div>
                     </div>
@@ -254,67 +263,79 @@
                         d="M6.143 0H1.857A1.857 1.857 0 0 0 0 1.857v4.286C0 7.169.831 8 1.857 8h4.286A1.857 1.857 0 0 0 8 6.143V1.857A1.857 1.857 0 0 0 6.143 0Zm10 0h-4.286A1.857 1.857 0 0 0 10 1.857v4.286C10 7.169 10.831 8 11.857 8h4.286A1.857 1.857 0 0 0 18 6.143V1.857A1.857 1.857 0 0 0 16.143 0Zm-10 10H1.857A1.857 1.857 0 0 0 0 11.857v4.286C0 17.169.831 18 1.857 18h4.286A1.857 1.857 0 0 0 8 16.143v-4.286A1.857 1.857 0 0 0 6.143 10ZM17 13h-2v-2a1 1 0 0 0-2 0v2h-2a1 1 0 0 0 0 2h2v2a1 1 0 0 0 2 0v-2h2a1 1 0 0 0 0-2Z" />
                 </svg>MENU</h5>
         </div>
-        <div class="grid grid-cols-3 gap-4 p-4 lg:grid-cols-4">
+        <div class="grid grid-cols-2 gap-4 p-4 lg:grid-cols-4">
 
-            <div
-                class="p-4 rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 dark:hover:bg-gray-600 dark:bg-gray-700">
-                <div
-                    class="flex justify-center items-center p-2 mx-auto mb-2 bg-gray-200 dark:bg-gray-600 rounded-full w-[48px] h-[48px] max-w-[48px] max-h-[48px]">
-                    <svg class="inline w-5 h-5 text-gray-500 dark:text-gray-400" aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 14">
-                        <path
-                            d="M18 0H2a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2ZM9 6v2H2V6h7Zm2 0h7v2h-7V6Zm-9 4h7v2H2v-2Zm9 2v-2h7v2h-7Z" />
-                    </svg>
-                </div>
-                <div class="font-medium text-center text-gray-500 dark:text-gray-400">Table</div>
-            </div>
+            @if (Auth::user())
+                <a href="{{ url('/akun') }}">
+                    <div
+                        class="p-4 rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 dark:hover:bg-gray-600 dark:bg-gray-700 lg:block">
+                        <div
+                            class="flex justify-center items-center p-2 mx-auto mb-2 bg-gray-200 dark:bg-gray-600 rounded-full w-[48px] h-[48px] max-w-[48px] max-h-[48px]">
+                            <i class="fa-solid fa-user inline text-gray-500 dark:text-gray-400"></i>
+                        </div>
+                        <div class="font-medium text-center text-gray-500 dark:text-gray-400">Akun</div>
+                    </div>
+                </a>
 
-            <a href="{{ url('/login') }}">
-                <div
-                    class="hidden p-4 rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 dark:hover:bg-gray-600 dark:bg-gray-700 lg:block">
+                <a href="{{ url('/transaksi') }}">
+                    <div
+                        class="p-4 rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 dark:hover:bg-gray-600 dark:bg-gray-700 lg:block">
+                        <div
+                            class="flex justify-center items-center p-2 mx-auto mb-2 bg-gray-200 dark:bg-gray-600 rounded-full w-[48px] h-[48px] max-w-[48px] max-h-[48px]">
+                            <svg class="inline w-5 h-5 text-gray-500 dark:text-gray-400" aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 14 20">
+                                <path
+                                    d="M13.383.076a1 1 0 0 0-1.09.217L11 1.586 9.707.293a1 1 0 0 0-1.414 0L7 1.586 5.707.293a1 1 0 0 0-1.414 0L3 1.586 1.707.293A1 1 0 0 0 0 1v18a1 1 0 0 0 1.707.707L3 18.414l1.293 1.293a1 1 0 0 0 1.414 0L7 18.414l1.293 1.293a1 1 0 0 0 1.414 0L11 18.414l1.293 1.293A1 1 0 0 0 14 19V1a1 1 0 0 0-.617-.924ZM10 15H4a1 1 0 1 1 0-2h6a1 1 0 0 1 0 2Zm0-4H4a1 1 0 1 1 0-2h6a1 1 0 1 1 0 2Zm0-4H4a1 1 0 0 1 0-2h6a1 1 0 1 1 0 2Z" />
+                            </svg>
+                        </div>
+                        <div class="font-medium text-center text-gray-500 dark:text-gray-400">Histori Transaksi</div>
+                    </div>
+                </a>
+            @else
+                <a href="{{ url('/login') }}">
+                    <div
+                        class="p-4 rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 dark:hover:bg-gray-600 dark:bg-gray-700 lg:block">
+                        <div
+                            class="flex justify-center items-center p-2 mx-auto mb-2 bg-gray-200 dark:bg-gray-600 rounded-full w-[48px] h-[48px] max-w-[48px] max-h-[48px]">
+                            <i class="fa-solid fa-person-walking-arrow-right inline text-gray-500 dark:text-gray-400"></i>
+                        </div>
+                        <div class="font-medium text-center text-gray-500 dark:text-gray-400">Login</div>
+                    </div>
+                </a>
+
+                <a href="{{ url('/register') }}">
+                    <div
+                        class="p-4 rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 dark:hover:bg-gray-600 dark:bg-gray-700">
+                        <div
+                            class="flex justify-center items-center p-2 mx-auto mb-2 bg-gray-200 dark:bg-gray-600 rounded-full w-[48px] h-[48px] max-w-[48px] max-h-[48px]">
+                            <i class="fa-solid fa-id-card inline text-gray-500 dark:text-gray-400"></i>
+                        </div>
+                        <div class="font-medium text-center text-gray-500 dark:text-gray-400">Register</div>
+                    </div>
+                </a>
+            @endif
+
+            {{-- PRODUCTS --}}
+            <a href="{{ url('/produk') }}">
+                <div class="p-4 rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 dark:hover:bg-gray-600 dark:bg-gray-700">
                     <div
                         class="flex justify-center items-center p-2 mx-auto mb-2 bg-gray-200 dark:bg-gray-600 rounded-full w-[48px] h-[48px] max-w-[48px] max-h-[48px]">
-                        <svg class="inline w-5 h-5 text-gray-500 dark:text-gray-400" aria-hidden="true"
-                            xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 14 20">
-                            <path
-                                d="M13.383.076a1 1 0 0 0-1.09.217L11 1.586 9.707.293a1 1 0 0 0-1.414 0L7 1.586 5.707.293a1 1 0 0 0-1.414 0L3 1.586 1.707.293A1 1 0 0 0 0 1v18a1 1 0 0 0 1.707.707L3 18.414l1.293 1.293a1 1 0 0 0 1.414 0L7 18.414l1.293 1.293a1 1 0 0 0 1.414 0L11 18.414l1.293 1.293A1 1 0 0 0 14 19V1a1 1 0 0 0-.617-.924ZM10 15H4a1 1 0 1 1 0-2h6a1 1 0 0 1 0 2Zm0-4H4a1 1 0 1 1 0-2h6a1 1 0 1 1 0 2Zm0-4H4a1 1 0 0 1 0-2h6a1 1 0 1 1 0 2Z" />
-                        </svg>
+                        <i class="fa-solid fa-box-archive inline text-gray-500 dark:text-gray-400"></i>
                     </div>
-                    <div class="font-medium text-center text-gray-500 dark:text-gray-400">Login</div>
+                    <div class="font-medium text-center text-gray-500 dark:text-gray-400">Produk</div>
                 </div>
             </a>
 
-            <a href="{{ url('/register') }}">
+            <a href="{{ url('/gallery') }}">
                 <div
                     class="p-4 rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 dark:hover:bg-gray-600 dark:bg-gray-700">
                     <div
                         class="flex justify-center items-center p-2 mx-auto mb-2 bg-gray-200 dark:bg-gray-600 rounded-full w-[48px] h-[48px] max-w-[48px] max-h-[48px]">
-                        <svg class="inline w-5 h-5 text-gray-500 dark:text-gray-400" aria-hidden="true"
-                            xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
-                            <path
-                                d="M16 1h-3.278A1.992 1.992 0 0 0 11 0H7a1.993 1.993 0 0 0-1.722 1H2a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2Zm-3 14H5a1 1 0 0 1 0-2h8a1 1 0 0 1 0 2Zm0-4H5a1 1 0 0 1 0-2h8a1 1 0 1 1 0 2Zm0-5H5a1 1 0 0 1 0-2h2V2h4v2h2a1 1 0 1 1 0 2Z" />
-                        </svg>
+                        <i class="fa-solid fa-photo-film inline w-5 h-5 text-gray-500 dark:text-gray-400"></i>
                     </div>
-                    <div class="font-medium text-center text-gray-500 dark:text-gray-400">Register</div>
+                    <div class="font-medium text-center text-gray-500 dark:text-gray-400">Gallery</div>
                 </div>
             </a>
-
-            {{-- CART --}}
-            <div class="p-4 rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 dark:hover:bg-gray-600 dark:bg-gray-700"
-                data-drawer-target="cart-right-drawer" data-drawer-show="cart-right-drawer"
-                data-drawer-placement="right" aria-controls="cart-right-drawer">
-                <div
-                    class="flex justify-center items-center p-2 mx-auto mb-2 bg-gray-200 dark:bg-gray-600 rounded-full w-[48px] h-[48px] max-w-[48px] max-h-[48px]">
-                    <svg class="inline w-5 h-5 text-gray-500 dark:text-gray-400" aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 21">
-                        <path
-                            d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z" />
-                        <path
-                            d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z" />
-                    </svg>
-                </div>
-                <div class="font-medium text-center text-gray-500 dark:text-gray-400">Chart</div>
-            </div>
 
         </div>
     </div>
