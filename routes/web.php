@@ -84,6 +84,22 @@ Route::middleware('auth')->group(function () {
             Route::get('/selesai', [AdminController::class, 'selesai']);
 
 
+
+
+
         });
+
+
+
+        Route::get('/produk', [AdminController::class, 'productIndex'])->name('productIndexAdmin');
+        Route::put('/produk/{slug}', [AdminController::class, 'productEdit'])->name('product.edit');
+
+        Route::get('/user', [AdminController::class, 'userIndex'])->name('userIndexAdmin');
+        Route::put('/user/{slug}', [AdminController::class, 'userEdit'])->name('user.edit');
+
+        //
     });
+
+
+    //
 });

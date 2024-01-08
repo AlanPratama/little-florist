@@ -33,7 +33,7 @@
                     Kami juga bisa membantu Anda untuk pengiriman ke berbagai kota di seluruh indonesia, karena kami
                     telah bekerjasama dengan florist seluruh indonesia.
                 </p>
-                <a href="#" class="btn">Learn more</a>
+                <a href="https://www.instagram.com/little_florist_shop/" target="_blank" class="btn">See More</a>
             </div>
         </div>
 

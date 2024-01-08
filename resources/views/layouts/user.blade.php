@@ -33,7 +33,7 @@
         <label for="toggler" class="fas  fa-bars"></label>
 
 
-        <a href="https://www.instagram.com/little_florist_shop/" class="logo"><img
+        <a href="https://www.instagram.com/little_florist_shop/" target="_blank" class="logo"><img
                 src="{{ asset('assets/LF_logo.png') }}" alt="logo"> Little Florist<span>.</span></a>
 
         <nav class="navbar">
@@ -334,7 +334,7 @@
                 </div>
             </a>
 
-            <a href="{{ url('/gallery') }}">
+            <a href="{{ url('/#gallery') }}">
                 <div
                     class="p-4 rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 dark:hover:bg-gray-600 dark:bg-gray-700">
                     <div

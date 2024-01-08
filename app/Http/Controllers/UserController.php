@@ -12,7 +12,7 @@ class UserController extends Controller
     public function homepage()
     {
         $products = Product::orderBy('sold', 'desc')->get();
-        if (Auth::check()) {
+        if (Auth::user()) {
             $carts = Cart::where('user_id', Auth::user()->id)->get();
             return view('pages.user.homepage', compact('products', 'carts'));
         } else {

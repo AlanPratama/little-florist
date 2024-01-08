@@ -13,7 +13,7 @@ class ProductController extends Controller
     {
         $products = Product::orderBy('sold', 'desc')->get();
 
-        if (Auth::check()) {
+        if (Auth::user()) {
             $carts = Cart::where('user_id', Auth::user()->id)->get();
             return view('pages.user.product.productIndex', compact('products', 'carts'));
         } else {
@@ -25,7 +25,7 @@ class ProductController extends Controller
     {
         $product = Product::where('slug', $slug)->first();
 
-        if (Auth::check()) {
+        if (Auth::user()) {
             $carts = Cart::where('user_id', Auth::user()->id)->get();
             return view('pages.user.product.productDetail', compact('product', 'carts'));
         } else {

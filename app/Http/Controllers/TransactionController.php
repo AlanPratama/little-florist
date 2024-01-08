@@ -167,7 +167,16 @@ class TransactionController extends Controller
 
     public function cancelTransaction($code)
     {
-        Transaction::where('code', $code)->where('status', '!=', 'Dikirim')->where('status', '!=', 'Selesai')->delete();
+        $transacitions = Transaction::where('code', $code)->where('status', '!=', 'Dikirim')->where('status', '!=', 'Selesai')->get();
+
+        foreach ($transacitions as $item) {
+            $item->products->stock += $item->total_product;
+            $item->products->sold -= $item->total_product;
+            $item->products->save();
+
+            $item->delete();
+        }
+
 
         return response()->json([
             'status' => 200

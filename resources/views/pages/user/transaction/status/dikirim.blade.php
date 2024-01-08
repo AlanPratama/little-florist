@@ -72,7 +72,7 @@
                         @if (Auth::user()->role == 'Admin' || $item->user_id == Auth::user()->id)
                             <div class="">
                                 <button type="button"
-                                    class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-semibold rounded-lg text-sm px-3 py-2 text-center" data-modal-target="accept-modal" data-modal-toggle="accept-modal">Dikirim</button>
+                                    class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-semibold rounded-lg text-sm px-3 py-2 text-center" data-modal-target="accept-modal" data-modal-toggle="accept-modal">Diterima</button>
                                 <!-- Main modal -->
                                 <div id="accept-modal" tabindex="-1" aria-hidden="true"
                                     class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
@@ -100,6 +100,7 @@
                                             </div>
                                             <!-- Modal body -->
                                             <div class="p-4 md:p-5">
+                                                apakah yakin sudah diterima?
                                                 <form class="space-y-4" action="{{ route('transaction.done', ['code' => $item->code]) }}" method="POST">
                                                     @csrf
                                                     {{-- <div>
