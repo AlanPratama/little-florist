@@ -60,7 +60,7 @@ class ProductController extends Controller
     {
         $productSlug = $request->input('productSlug');
         $product = Product::where('slug', $productSlug)->first();
-        $cart = Cart::where('product_id', $product->id)->first();
+        $cart = Cart::where('product_id', $product->id)->where('user_id', Auth::user()->id)->first();
 
         if ($cart) {
             $cart->total_product += 1;

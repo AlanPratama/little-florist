@@ -8,6 +8,7 @@
 
     <title>@yield('title') | Little Florist</title>
     <link rel="stylesheet" href="{{ asset('assets/style.css') }}">
+    {{-- <link rel="stylesheet" href="assets/style.css"> --}}
     <link rel="shortcut icon" href="{{ asset('assets/LF_logo.png') }}" type="image/x-icon">
 
     {{-- FONTAWASOME --}}
@@ -49,7 +50,11 @@
                 aria-controls="cart-right-drawer" class="fa-solid fa-cart-shopping"></i>
             @if (!Auth::user())
                 <a href="{{ url('/login') }}">
-                    <i class="fa-solid fa-person-walking-arrow-right"></i>
+                    <i class="fa-solid fa-person-walking-arrow-right" title="login"></i>
+                </a>
+            @else
+                <a href="{{ url('/logout') }}">
+                    <i class="fa-solid fa-right-to-bracket" title="logout"></i>
                 </a>
             @endif
         </div>
@@ -136,7 +141,8 @@
                             <div class="flex justify-evenly items-start my-6">
                                 <div class="w-auto rounded shadow" style="margin-right: 10px;">
                                     <img src="{{ $cart->products->image_asset == 'YA' ? asset('assets/' . $cart->products->image) : $cart->products->image }}"
-                                        alt="product" class="" style="aspect-ratio: 1/1; width: 100px; min-width: 100px; max-width: 100px; ">
+                                        alt="product" class=""
+                                        style="aspect-ratio: 1/1; width: 100px; min-width: 100px; max-width: 100px; ">
                                 </div>
                                 <div class="w-auto pl-1 flex flex-col items-start justify-start">
 
@@ -297,7 +303,8 @@
                         class="p-4 rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 dark:hover:bg-gray-600 dark:bg-gray-700 lg:block">
                         <div
                             class="flex justify-center items-center p-2 mx-auto mb-2 bg-gray-200 dark:bg-gray-600 rounded-full w-[48px] h-[48px] max-w-[48px] max-h-[48px]">
-                            <i class="fa-solid fa-person-walking-arrow-right inline text-gray-500 dark:text-gray-400"></i>
+                            <i
+                                class="fa-solid fa-person-walking-arrow-right inline text-gray-500 dark:text-gray-400"></i>
                         </div>
                         <div class="font-medium text-center text-gray-500 dark:text-gray-400">Login</div>
                     </div>
@@ -317,7 +324,8 @@
 
             {{-- PRODUCTS --}}
             <a href="{{ url('/produk') }}">
-                <div class="p-4 rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 dark:hover:bg-gray-600 dark:bg-gray-700">
+                <div
+                    class="p-4 rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 dark:hover:bg-gray-600 dark:bg-gray-700">
                     <div
                         class="flex justify-center items-center p-2 mx-auto mb-2 bg-gray-200 dark:bg-gray-600 rounded-full w-[48px] h-[48px] max-w-[48px] max-h-[48px]">
                         <i class="fa-solid fa-box-archive inline text-gray-500 dark:text-gray-400"></i>

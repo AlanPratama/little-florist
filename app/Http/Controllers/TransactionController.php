@@ -227,17 +227,22 @@ class TransactionController extends Controller
 
 
 
+
     public function belumBayarDetail($code)
     {
         $transaction = Transaction::where('code', $code)->where('status', 'Belum Bayar')->get();
 
-        if ($transaction) {
+        if ($transaction->count() > 0) {
             $products = Transaction::where('status', 'Belum Bayar')->get();
             $carts = Cart::where('user_id', Auth::user()->id)->get();
 
             return view('pages.user.transaction.status.belumBayar', compact('carts', 'transaction', 'products'));
         } else {
-            return redirect()->back();
+            if (Auth::user()->role == 'User') {
+                return redirect('/transaksi');
+            } else {
+                return redirect('/admin/transaksi/belum-bayar');
+            }
         }
     }
 
@@ -246,13 +251,17 @@ class TransactionController extends Controller
     {
         $transaction = Transaction::where('code', $code)->where('status', 'Diproses')->get();
 
-        if ($transaction) {
+        if ($transaction->count() > 0) {
             $products = Transaction::where('status', 'Diproses')->get();
             $carts = Cart::where('user_id', Auth::user()->id)->get();
 
             return view('pages.user.transaction.status.diproses', compact('carts', 'transaction', 'products'));
         } else {
-            return redirect()->back();
+            if (Auth::user()->role == 'User') {
+                return redirect('/transaksi');
+            } else {
+                return redirect('/admin/transaksi/diproses');
+            }
         }
     }
 
@@ -260,13 +269,17 @@ class TransactionController extends Controller
     {
         $transaction = Transaction::where('code', $code)->where('status', 'Dikirim')->get();
 
-        if ($transaction) {
+        if ($transaction->count() > 0) {
             $products = Transaction::where('status', 'Dikirim')->get();
             $carts = Cart::where('user_id', Auth::user()->id)->get();
 
             return view('pages.user.transaction.status.dikirim', compact('carts', 'transaction', 'products'));
         } else {
-            return redirect()->back();
+            if (Auth::user()->role == 'User') {
+                return redirect('/transaksi');
+            } else {
+                return redirect('/admin/transaksi/dikirim');
+            }
         }
     }
 
@@ -304,13 +317,17 @@ class TransactionController extends Controller
     {
         $transaction = Transaction::where('code', $code)->where('status', 'Selesai')->get();
 
-        if ($transaction) {
+        if ($transaction->count() > 0) {
             $products = Transaction::where('status', 'Selesai')->get();
             $carts = Cart::where('user_id', Auth::user()->id)->get();
 
             return view('pages.user.transaction.status.selesai', compact('carts', 'transaction', 'products'));
         } else {
-            return redirect()->back();
+            if (Auth::user()->role == 'User') {
+                return redirect('/transaksi');
+            } else {
+                return redirect('/admin/transaksi/selesai');
+            }
         }
     }
 }
