@@ -362,17 +362,17 @@
                 <h3>quick links</h3>
                 <a href="#home">home</a>
                 <a href="#about">about</a>
-                <a href="#products">products</a>
+                <a href="#pricelist">products</a>
                 <a href="#review">review</a>
-                <a href="#contact">contact</a>
+                <a href="#contactUs">contact</a>
             </div>
 
-            <div class="box">
+            {{-- <div class="box">
                 <h3>extra links</h3>
                 <a href="#">my account</a>
                 <a href="#">my order</a>
                 <a href="#">my favorite</a>
-            </div>
+            </div> --}}
 
             <div class="box">
                 <h3>locations</h3>

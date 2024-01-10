@@ -239,7 +239,7 @@
                                         </svg>
                                     </span>
                                     <h3 class="leading-tight font-bold">Hubungi Admin Dan Berikan Kode Order</h3>
-                                    <a href="{{ url('https://wa.me/+6285817000942?text=Hallo%20Admin!%20Saya%20Sudah%20Order%20di%20Little%20Florist,%20Ini%20Kode%20Pembayaran-nya%20*' . $item->code . '*') }}"
+                                    <a href="{{ url('https://wa.me/+6285811013635?text=Hallo%20Admin!%20Saya%20Sudah%20Order%20di%20Little%20Florist,%20Ini%20Kode%20Pembayaran-nya%20*' . $item->code . '*') }}"
                                         target="_blank" class="w-auto mt-1">
                                         <button type="button"
                                             class="text-sm bg-green-500 text-white px-2 py-1 rounded">Hubungi

@@ -11,9 +11,38 @@ use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
-    public function dashboard()
+    public function dashboard(Request $request)
     {
-        return view('pages.admin.other.dashboard');
+        if ($request->filter) {
+            if ($request->filter == 'terbaru') {
+                $diproses = Transaction::where('status', 'Diproses')
+                    ->orderBy('created_at', 'desc')
+                    ->get();
+            } elseif ($request->filter == 'terlama') {
+                $diproses = Transaction::where('status', 'Diproses')
+                    ->orderBy('created_at', 'asc')
+                    ->get();
+            }
+        } elseif ($request->kode) {
+            if ($request->kode) {
+                $diproses = Transaction::where('status', 'Diproses')
+                    ->orderBy('created_at', 'desc')
+                    ->where('code', 'like', '%' . $request->kode . '%')
+                    ->get();
+            }
+        } else {
+            $diproses = Transaction::where('status', 'Diproses')
+                ->orderBy('created_at', 'desc')
+                ->get();
+        }
+        $totalTran = Transaction::where('status', '!=', 'Belum Bayar')->get();
+        $totalPem = 0;
+
+        foreach ($totalTran as $item) {
+            $totalPem += $item->total_price;
+        }
+
+        return view('pages.admin.other.dashboard', compact('diproses', 'totalTran', 'totalPem'));
     }
 
 

@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\TestController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
 use App\Models\Transaction;
@@ -67,6 +68,14 @@ Route::middleware('auth')->group(function () {
 
 
 
+
+
+
+
+
+    // ADMIN
+    // TOTAL TRANSAKSI, TOTAL PEMBAYARAN
+    // TABLE TRANSAKSI STATUS DIPROSES
     Route::middleware('only_admin')->prefix('admin')->group(function () {
         Route::get('/dashboard', [AdminController::class, 'dashboard']);
 
@@ -90,14 +99,15 @@ Route::middleware('auth')->group(function () {
         });
 
 
-
         Route::get('/produk', [AdminController::class, 'productIndex'])->name('productIndexAdmin');
         Route::put('/produk/{slug}', [AdminController::class, 'productEdit'])->name('product.edit');
 
         Route::get('/user', [AdminController::class, 'userIndex'])->name('userIndexAdmin');
         Route::put('/user/{slug}', [AdminController::class, 'userEdit'])->name('user.edit');
 
-        //
+        // JUST SOMETHING TEST, DOES IT WORK WHEN THE PROJECT HAS DEPLOYED IN WEBHOST?
+        Route::get('/just-something-test', [TestController::class, 'index'])->name('testIndex');
+        Route::post('/just-something-test', [TestController::class, 'post'])->name('testPost');
     });
 
 
