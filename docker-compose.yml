@@ -6,6 +6,7 @@ services:
     container_name: little_florist
     restart: unless-stopped
     working_dir: /var/www
+    ports: 8080:8080
     volumes:
       - .:/var/www
     depends_on:
