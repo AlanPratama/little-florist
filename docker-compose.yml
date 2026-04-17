@@ -12,6 +12,9 @@ services:
 
     command: >
       sh -c "
+        chown -R www-data:www-data storage bootstrap/cache &&
+        chmod -R 775 storage bootstrap/cache &&
+
         cp .env.example .env || true &&
 
         sed -i 's/DB_HOST=.*/DB_HOST=db/' .env &&
@@ -27,6 +30,8 @@ services:
         php artisan route:clear &&
         php artisan view:clear &&
         php artisan migrate --force || true &&
+        php artisan db:seed ProductSeeder || true &&
+        php artisan db:seed UserSeeder || true &&
         php-fpm
       "
     depends_on:
