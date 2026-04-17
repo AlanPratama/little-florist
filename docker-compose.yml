@@ -19,7 +19,7 @@ services:
       MYSQL_DATABASE: little-florist
       MYSQL_ROOT_PASSWORD: root
       MYSQL_PASSWORD: root
-      MYSQL_USER: root
+      MYSQL_USER: laravel
     ports:
       - "3306:3306"
     volumes:
