@@ -26,10 +26,10 @@ COPY . .
 # Install dependencies
 RUN composer install --no-dev --optimize-autoloader
 
+RUN sed -i 's|listen = 127.0.0.1:9000|listen = 0.0.0.0:9000|g' /usr/local/etc/php-fpm.d/www.conf
+
 # Permission
 RUN chown -R www-data:www-data /var/www \
     && chmod -R 775 storage bootstrap/cache
 
 CMD ["php-fpm"]
-
-RUN sed -i 's|listen = 127.0.0.1:9000|listen = 0.0.0.0:9000|g' /usr/local/etc/php-fpm.d/www.conf
