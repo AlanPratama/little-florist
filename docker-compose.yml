@@ -23,16 +23,26 @@ services:
         sed -i 's|DB_PASSWORD=.*|DB_PASSWORD=root|' .env &&
         sed -i 's|APP_URL=.*|APP_URL=https://little-florist.alanpratama.site|' .env &&
 
+        echo 'Waiting for MySQL...'
+        until nc -z db 3306; do
+            sleep 2
+        done
+
+        echo 'MySQL is ready!'
+
         composer install &&
         php artisan key:generate --force &&
+
+        php artisan migrate --force || true &&
+        php artisan db:seed ProductSeeder || true &&
+        php artisan db:seed UserSeeder || true &&
+
         php artisan storage:link || true &&
+
         php artisan config:clear &&
         php artisan cache:clear &&
         php artisan route:clear &&
         php artisan view:clear &&
-        php artisan migrate --force || true &&
-        php artisan db:seed ProductSeeder || true &&
-        php artisan db:seed UserSeeder || true &&
         php-fpm
       "
     depends_on:
