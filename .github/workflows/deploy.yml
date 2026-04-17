@@ -2,7 +2,7 @@ name: Deploy Little Florist
 
 on:
   push:
-    branches: ["main"]
+    branches: ["master"]
 
 jobs:
   deploy:
