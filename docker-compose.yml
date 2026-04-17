@@ -8,6 +8,12 @@ services:
     working_dir: /var/www
     volumes:
       - .:/var/www
+    command: >
+      sh -c "
+        composer install &&
+        php artisan storage:link || true &&
+        php-fpm
+      "
     depends_on:
       - db
 
