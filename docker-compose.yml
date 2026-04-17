@@ -38,8 +38,8 @@ services:
         php artisan key:generate --force &&
 
         php artisan migrate --force || true &&
-        php artisan db:seed ProductSeeder || true &&
-        php artisan db:seed UserSeeder || true &&
+        php artisan db:seed --class=ProductSeeder &&
+        php artisan db:seed --class=UserSeeder &&
 
         php artisan storage:link || true &&
 
