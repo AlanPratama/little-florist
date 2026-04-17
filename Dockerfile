@@ -24,7 +24,7 @@ WORKDIR /var/www
 COPY . .
 
 # Install dependencies
-RUN composer install --no-dev --optimize-autoloader
+RUN composer install
 
 RUN sed -i 's|listen = 127.0.0.1:9000|listen = 0.0.0.0:9000|g' /usr/local/etc/php-fpm.d/www.conf
 
