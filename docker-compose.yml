@@ -10,8 +10,15 @@ services:
       - .:/var/www
     command: >
       sh -c "
+        cp .env.example .env || true &&
         composer install &&
+        php artisan key:generate &&
         php artisan storage:link || true &&
+        php artisan config:clear &&
+        php artisan cache:clear &&
+        php artisan route:clear &&
+        php artisan view:clear &&
+        php artisan migrate --force || true &&
         php-fpm
       "
     depends_on:
@@ -35,7 +42,7 @@ services:
     container_name: little_florist_mysql
     restart: unless-stopped
     environment:
-      MYSQL_DATABASE: little-florist
+      MYSQL_DATABASE: little_florist
       MYSQL_ROOT_PASSWORD: root
       MYSQL_PASSWORD: root
       MYSQL_USER: laravel
