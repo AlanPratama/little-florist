@@ -1,0 +1,47 @@
+name: Deploy Little Florist
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Deploy via SSH
+        run: |
+          ssh -o StrictHostKeyChecking=no dockerserver@192.168.0.103 << 'EOF'
+            set -e
+
+            APP_DIR="/var/www/laravel-app"
+
+            echo "Masuk ke project"
+            cd $APP_DIR
+
+            echo "Pull latest code"
+            git pull origin main
+
+            echo "Stop container lama"
+            docker compose down || true
+
+            echo "Build & start container"
+            docker compose up -d --build
+
+            echo "Run migration"
+            docker exec little_florist php artisan migrate --force
+
+            echo "Cache config"
+            docker exec little_florist php artisan config:cache
+            docker exec little_florist php artisan route:cache
+            docker exec little_florist php artisan view:cache
+
+            php artisan storage:link || true
+
+            php-fpm
+
+            echo "Fix permission"
+            docker exec little_florist chown -R www-data:www-data storage bootstrap/cache
+
+            echo "DONE DEPLOY"
+          EOF
