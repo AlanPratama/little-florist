@@ -14,13 +14,13 @@ jobs:
           ssh -o StrictHostKeyChecking=no dockerserver@192.168.0.103 << 'EOF'
             set -e
 
-            APP_DIR="/var/www/laravel-app"
+            APP_DIR="/var/www/little-florist"
 
             echo "Masuk ke project"
             cd $APP_DIR
 
             echo "Pull latest code"
-            git pull origin main
+            git pull origin master
 
             echo "Stop container lama"
             docker compose down || true
