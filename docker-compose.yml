@@ -6,12 +6,23 @@ services:
     container_name: little_florist
     restart: unless-stopped
     working_dir: /var/www
-    ports:
-      - "8081:8080"
     volumes:
       - .:/var/www
     depends_on:
       - db
+
+  nginx:
+    image: nginx:alpine
+    container_name: little_florist_nginx
+    restart: unless-stopped
+    ports:
+    - "8080:80"
+    volumes:
+    - .:/var/www
+    - ./docker/nginx:/etc/nginx/conf.d
+    depends_on:
+    - app
+
 
   db:
     image: mysql:8.0
